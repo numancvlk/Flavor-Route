@@ -223,6 +223,16 @@ export default function AddRecipeScreen() {
     try {
       await addRecipes(newRecipe);
       alert("Tarif Başarıyla Kaydedildi");
+      setTitle("");
+      setDescription("");
+      setPrepTime(undefined);
+      setCookTime(undefined);
+      setServings(undefined);
+      setIngredient([]);
+      setInstruction([]);
+      setPhotos([]);
+      setCategories([]);
+      setTag([]);
       navigation.goBack();
     } catch (error) {
       console.log("Tarif Save Hatası");

@@ -1,17 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { RootParamList } from "../types/navigation";
 //--------------SCREENS-------------------
 import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import AddRecipeScreen from "../screens/AddRecipeScreen";
 
-const TAB = createBottomTabNavigator();
-
-export type RootParamList = {
-  HomeScreen: undefined;
-  FavoritesScreen: undefined;
-  AddRecipeScreen: undefined;
-};
+const TAB = createBottomTabNavigator<RootParamList>();
 
 export default function AppNavigator() {
   return (

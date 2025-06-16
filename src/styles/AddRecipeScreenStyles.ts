@@ -10,9 +10,6 @@ const AddRecipeScreenStyles = StyleSheet.create({
     padding: Spacing.medium,
     paddingBottom: Spacing.xLarge * 2,
   },
-  appBarHeader: {
-    backgroundColor: Colors.primary,
-  },
   input: {
     marginBottom: Spacing.medium,
     backgroundColor: Colors.white,
