@@ -25,7 +25,7 @@ export const saveRecipes = async (recipes: Recipe[]): Promise<void> => {
 
 export const addRecipes = async (
   recipeData: Omit<Recipe, "id" | "createdAt" | "updatedAt">
-): Promise<void> => {
+): Promise<Recipe> => {
   try {
     const currentRecipes = await getRecipes();
     const now = new Date().toISOString();
@@ -39,8 +39,11 @@ export const addRecipes = async (
 
     const updatedRecipes = [...currentRecipes, recipeToAdd];
     await saveRecipes(updatedRecipes);
+    console.log(updatedRecipes);
+    return recipeToAdd;
   } catch (error) {
     console.log("AddRecipes Hata");
+    throw error;
   }
 };
 
