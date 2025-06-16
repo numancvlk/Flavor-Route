@@ -44,3 +44,18 @@ export const globalStyles = StyleSheet.create({
     elevation: 4,
   },
 });
+
+export const Typography = {
+  fontFamily: {
+    regular: "System", // Varsayılan sistem fontu
+    medium: "System",
+    semiBold: "System",
+    bold: "System",
+  },
+  fontSize: {
+    small: 12,
+    medium: 16,
+    large: 20,
+    extraLarge: 24,
+  },
+};
