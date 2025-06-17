@@ -1,11 +1,13 @@
 import React, { useCallback, useState, useMemo } from "react";
 import { View, ScrollView, RefreshControl } from "react-native";
-import { Text, Appbar, Card, Searchbar, FAB } from "react-native-paper";
+import { Text, Card, Searchbar, FAB } from "react-native-paper";
 import {
   useNavigation,
   NavigationProp,
   useFocusEffect,
 } from "@react-navigation/native";
+
+//-----------DAHİLİ-------------------
 import { RootParamList } from "../types/navigation";
 import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { Recipe } from "../types/Recipe";
@@ -26,7 +28,7 @@ export default function HomeScreen() {
       const loadedUserRecipes = await getRecipes();
       setUserRecipes(loadedUserRecipes);
     } catch (error) {
-      console.log("Tarif Yükleme Hatası");
+      console.log("Recipe Upload Error");
     } finally {
       setRefreshing(false);
     }
@@ -83,7 +85,7 @@ export default function HomeScreen() {
   }, [allRecipes, searchQuery]);
 
   const handleRecipePress = (recipeId: string) => {
-    console.log("Tarif detayı gösterilecek:", recipeId);
+    console.log("Recipe details will be shown:", recipeId);
   };
 
   return (
@@ -99,7 +101,7 @@ export default function HomeScreen() {
         }
       >
         <Searchbar
-          placeholder="Tarif ara..."
+          placeholder="Search recipe..."
           onChangeText={onChangeSearch}
           value={searchQuery}
           style={HomeScreenStyles.searchBar}
@@ -109,11 +111,11 @@ export default function HomeScreen() {
 
         {filteredRecipes.length === 0 && allRecipes.length > 0 ? (
           <Text style={HomeScreenStyles.noRecipesText}>
-            Aradığınız kriterlere uygun tarif bulunamadı.
+            No recipes found matching your criteria.
           </Text>
         ) : filteredRecipes.length === 0 && allRecipes.length === 0 ? (
           <Text style={HomeScreenStyles.noRecipesText}>
-            Henüz hiç tarifiniz yok. İlk tarifinizi ekleyin!
+            You don't have any recipes yet. Add your first recipe!
           </Text>
         ) : (
           filteredRecipes.map((recipe) => (
@@ -129,7 +131,9 @@ export default function HomeScreen() {
                 />
               ) : (
                 <View style={HomeScreenStyles.noImagePlaceholder}>
-                  <Text style={HomeScreenStyles.noImageText}>Görsel Yok</Text>
+                  <Text style={HomeScreenStyles.noImageText}>
+                    No Image Available
+                  </Text>
                 </View>
               )}
               <Card.Content style={HomeScreenStyles.cardContent}>
@@ -144,7 +148,7 @@ export default function HomeScreen() {
                 )}
                 {recipe.categories.length > 0 && (
                   <Text style={HomeScreenStyles.cardCategory}>
-                    Kategori: {recipe.categories.join(", ")}
+                    Category:{recipe.categories.join(", ")}
                   </Text>
                 )}
               </Card.Content>
@@ -157,7 +161,7 @@ export default function HomeScreen() {
         onPress={() => navigation.navigate("AddRecipeScreen")}
         style={HomeScreenStyles.fab}
         icon="plus"
-        label="Yeni Tarif Ekle"
+        label="Add New Recipe"
       />
     </View>
   );

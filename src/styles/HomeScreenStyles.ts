@@ -33,6 +33,7 @@ const HomeScreenStyles = StyleSheet.create({
     width: "100%",
   },
   noImagePlaceholder: {
+    width: "100%",
     height: 180,
     backgroundColor: Colors.lightGray,
     justifyContent: "center",

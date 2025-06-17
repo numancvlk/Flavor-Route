@@ -14,22 +14,76 @@ import AddRecipeScreenStyles from "../styles/AddRecipeScreenStyles";
 import { Colors } from "../styles/globalStyles";
 
 const predefinedCategories = [
-  "Ana Yemek",
-  "Tatlı",
-  "Çorba",
-  "Kahvaltı",
-  "Salata",
-  "İçecekler",
+  "Snacks",
+  "Appetizers",
+  "Mezes",
+  "Baked Goods",
+  "Seafood",
+  "Meat Dishes",
+  "Chicken Dishes",
+  "Vegetable Dishes",
+  "Vegan Options",
+  "Vegetarian Options",
+  "Gluten-Free Items",
+  "Kids Menu",
+  "Sides",
+  "Sandwiches",
+  "Burgers",
+  "Pizza",
+  "Pasta",
+  "Desserts",
+  "Cold Beverages",
+  "Hot Beverages",
+  "Today's Menu",
+  "New Arrivals",
+  "Popular Items",
+  "Discounted Items",
 ];
 const predefinedTags = [
-  "Hızlı",
-  "Kolay",
+  "Ready in 5 Minutes",
+  "Ready in 10 Minutes",
+  "Ready in 15 Minutes",
+  "Very Easy",
+  "Medium Level",
+  "Hard",
+  "Tastes Like Store-Bought",
+  "Baked",
+  "On the Stove",
+  "Fried",
+  "Boiled",
+  "Grilled",
+  "Steamed",
+  "Raw",
   "Vegan",
-  "Vejetaryen",
-  "Glutensiz",
-  "Sağlıklı",
-  "Misafir Yemeği",
-  "Fırında",
+  "Vegetarian",
+  "Gluten-Free",
+  "Sugar-Free",
+  "Low Carb",
+  "Practical",
+  "Budget-Friendly",
+  "Filling",
+  "Few Ingredients",
+  "One-Pot",
+  "For Breakfast",
+  "For Dinner",
+  "For Lunch",
+  "Snack",
+  "Quick & Easy",
+  "With Meat",
+  "With Chicken",
+  "Olive Oil-Based",
+  "Low Calorie",
+  "Kid-Friendly",
+  "Holiday Dish",
+  "Special Occasion",
+  "Classic",
+  "Innovative",
+  "Seasonal",
+  "No Oven Needed",
+  "For Guests",
+  "Healthy",
+  "Fast",
+  "Easy",
 ];
 
 export default function AddRecipeScreen() {
@@ -91,7 +145,7 @@ export default function AddRecipeScreen() {
     if (field === "unit") {
       if (/^\d+(\.\d+)?$/.test(value.trim()) && value.trim() !== "") {
         alert(
-          'Birim alanına sayısal değer girilemez. Lütfen "gr", "adet" gibi birimler girin.'
+          "Numeric values are not allowed in the unit field. Please enter units such as 'g', 'pieces', etc."
         );
         return;
       }
@@ -100,7 +154,7 @@ export default function AddRecipeScreen() {
     if (field === "quantity") {
       if (value.trim() !== "" && !/^\d+(\.\d+)?$/.test(value.trim())) {
         alert(
-          "Miktar alanına sadece sayısal değerler (örn: 2, 0.5) girilebilir."
+          "Only numeric values (e.g., 2, 0.5) can be entered in the amount field."
         );
         return;
       }
@@ -109,7 +163,7 @@ export default function AddRecipeScreen() {
     if (field === "name") {
       if (/^\d+$/.test(value.trim()) && value.trim() !== "") {
         alert(
-          "Malzeme adı alanına sadece sayı girilemez. Lütfen malzeme adını (örn: Domates, Un) girin."
+          "Only numbers cannot be entered in the ingredient name field. Please enter the name of the ingredient (e.g., Tomato, Flour)."
         );
         return;
       }
@@ -151,7 +205,7 @@ export default function AddRecipeScreen() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
-      alert("Medya Erişimi Gerekli");
+      alert("Media Access Required");
       return;
     }
 
@@ -187,14 +241,14 @@ export default function AddRecipeScreen() {
   //-------------SAVE BUTTON-----------------
   const handleSaveRecipe = async () => {
     if (title === "") {
-      alert("Title boş bırakılamaz!");
+      alert("The title cannot be left empty!");
       return;
     }
     const filteredIngredients = ingredient.filter(
       (ing) => ing.name.trim() !== ""
     );
     if (filteredIngredients.length === 0) {
-      alert("Lütfen bir malzeme adı giriniz");
+      alert("Please enter an ingredient name.");
       return;
     }
 
@@ -202,7 +256,7 @@ export default function AddRecipeScreen() {
       (ins) => ins.step.trim() !== ""
     );
     if (filteredInstructions.length === 0) {
-      alert("Lütfen talimatları giriniz");
+      alert("Please enter the instructions.");
       return;
     }
 
@@ -222,7 +276,7 @@ export default function AddRecipeScreen() {
 
     try {
       await addRecipes(newRecipe);
-      alert("Tarif Başarıyla Kaydedildi");
+      alert("Recipe saved successfully.");
       setTitle("");
       setDescription("");
       setPrepTime(undefined);
@@ -235,7 +289,7 @@ export default function AddRecipeScreen() {
       setTag([]);
       navigation.goBack();
     } catch (error) {
-      console.log("Tarif Save Hatası");
+      console.log("Recipe Save Error");
       return;
     }
   };
@@ -264,7 +318,7 @@ export default function AddRecipeScreen() {
           style={AddRecipeScreenStyles.input}
         />
         <TextInput
-          placeholder="Cook Time (DK)"
+          placeholder="Cook Time (min)"
           value={cookTime !== undefined ? String(cookTime) : ""}
           onChangeText={handleCookTime}
           style={AddRecipeScreenStyles.input}
@@ -276,12 +330,12 @@ export default function AddRecipeScreen() {
           style={AddRecipeScreenStyles.input}
         />
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
-          Malzemeler
+          Ingredients
         </Text>
         {ingredient.map((ingredient) => (
           <View key={ingredient.id} style={AddRecipeScreenStyles.rowContainer}>
             <TextInput
-              label="Miktar"
+              label="Amount"
               value={ingredient.quantity}
               onChangeText={(text) =>
                 handleIngredientChange(ingredient.id, "quantity", text)
@@ -291,7 +345,7 @@ export default function AddRecipeScreen() {
               keyboardType="numeric"
             />
             <TextInput
-              label="Birim (gr,adet,bardak)"
+              label="Unit (g, pcs, cup)"
               value={ingredient.unit}
               onChangeText={(text) =>
                 handleIngredientChange(ingredient.id, "unit", text)
@@ -300,7 +354,7 @@ export default function AddRecipeScreen() {
               style={AddRecipeScreenStyles.ingredientInput}
             />
             <TextInput
-              label="Malzeme Adı"
+              label="Ingredient Name"
               value={ingredient.name}
               onChangeText={(text) =>
                 handleIngredientChange(ingredient.id, "name", text)
@@ -312,7 +366,7 @@ export default function AddRecipeScreen() {
               icon="close-circle"
               size={24}
               onPress={() => handleRemoveIngredient(ingredient.id)}
-              accessibilityLabel="Malzemeyi Sil"
+              accessibilityLabel="Delete Ingredient"
             />
           </View>
         ))}
@@ -321,16 +375,16 @@ export default function AddRecipeScreen() {
           onPress={handleAddIngredient}
           style={AddRecipeScreenStyles.addButton}
         >
-          + Malzeme Ekle
+          + Add Ingredient
         </Button>
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
-          Talimatlar
+          Instructions
         </Text>
         {instruction.map((instruction, index) => (
           <View key={instruction.id} style={AddRecipeScreenStyles.rowContainer}>
             <TextInput
-              label={`Adım ${index + 1}`}
+              label={`Step ${index + 1}`}
               value={instruction.step}
               onChangeText={(text) =>
                 handleInstructionChange(instruction.id, text)
@@ -344,7 +398,7 @@ export default function AddRecipeScreen() {
               icon="close-circle"
               size={24}
               onPress={() => handleRemoveInstruction(instruction.id)}
-              accessibilityLabel="Talimat Adımını Sil"
+              accessibilityLabel="Delete Instruction Step"
             />
           </View>
         ))}
@@ -353,11 +407,11 @@ export default function AddRecipeScreen() {
           onPress={handleAddInstruction}
           style={AddRecipeScreenStyles.addButton}
         >
-          + Adım Ekle
+          + Add Step
         </Button>
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
-          Fotoğraflar
+          Photos
         </Text>
         <Button
           mode="outlined"
@@ -366,7 +420,7 @@ export default function AddRecipeScreen() {
           labelStyle={{ color: Colors.primary }}
           icon="image-plus"
         >
-          Fotoğraf Seç
+          Select Photo
         </Button>
         {photos.length > 0 && (
           <View style={AddRecipeScreenStyles.photoPreviewContainer}>
@@ -381,7 +435,7 @@ export default function AddRecipeScreen() {
         )}
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
-          Kategoriler
+          Categories
         </Text>
         <View style={AddRecipeScreenStyles.chipContainer}>
           {predefinedCategories.map((cat) => (
@@ -406,7 +460,7 @@ export default function AddRecipeScreen() {
         </View>
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
-          Etiketler
+          Tags
         </Text>
         <View style={AddRecipeScreenStyles.chipContainer}>
           {predefinedTags.map((tagItem) => (
@@ -435,7 +489,7 @@ export default function AddRecipeScreen() {
           style={AddRecipeScreenStyles.addButton}
           icon="content-save"
         >
-          Tarifi Kaydet
+          Save Recipe
         </Button>
       </ScrollView>
     </View>
