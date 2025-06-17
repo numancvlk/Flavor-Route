@@ -272,6 +272,7 @@ export default function AddRecipeScreen() {
       categories: categories,
       tags: tag,
       isFavorite: false,
+      isUserAdded: true,
     };
 
     try {

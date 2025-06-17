@@ -118,7 +118,7 @@ export default function MyRecipesScreen() {
                 ) : (
                   <View style={MyRecipesScreenStyles.noImagePlaceholder}>
                     <Text style={MyRecipesScreenStyles.noImageText}>
-                      No Photo
+                      No Image Available
                     </Text>
                   </View>
                 )}
