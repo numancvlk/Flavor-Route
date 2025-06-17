@@ -1,9 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { v4 as uuidv4 } from "uuid";
 import { Recipe } from "../types/Recipe";
+import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 
 const RECIPES_KEY = "MYRECIPES";
-
+const INITIALIZED_FLAG_KEY = "HAS_INITIALIZED_DEFAULT_RECIPES";
 export const getRecipes = async (): Promise<Recipe[]> => {
   try {
     const jsonValue = await AsyncStorage.getItem(RECIPES_KEY);
@@ -52,14 +53,32 @@ export const updateRecipes = async (updatedRecipe: Recipe): Promise<void> => {
     const currentRecipes = await getRecipes();
     const now = new Date().toISOString();
 
-    const newRecipes = currentRecipes.map((recipe) =>
-      recipe.id === updatedRecipe.id
-        ? { ...updatedRecipe, updatedAt: now }
-        : recipe
-    );
+    let recipeFound = false;
+    const newRecipes = currentRecipes.map((recipe) => {
+      if (recipe.id === updatedRecipe.id) {
+        recipeFound = true;
+
+        return {
+          ...updatedRecipe,
+          updatedAt: now,
+          isUserAdded: updatedRecipe.isUserAdded ?? false,
+        };
+      }
+      return recipe;
+    });
+
+    if (!recipeFound) {
+      const recipeToSave = {
+        ...updatedRecipe,
+        updatedAt: now,
+        isUserAdded: updatedRecipe.isUserAdded ?? false,
+      };
+      newRecipes.push(recipeToSave);
+    }
+
     await saveRecipes(newRecipes);
   } catch (error) {
-    console.log("UpdateRecipes Hata");
+    console.error("UpdateRecipes Hata:", error);
   }
 };
 

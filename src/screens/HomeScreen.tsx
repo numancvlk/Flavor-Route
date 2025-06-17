@@ -1,17 +1,23 @@
 import React, { useCallback, useState, useMemo } from "react";
-import { View, ScrollView, RefreshControl } from "react-native";
+import {
+  View,
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import { Text, Card, Searchbar, FAB } from "react-native-paper";
 import {
   useNavigation,
   NavigationProp,
   useFocusEffect,
 } from "@react-navigation/native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 //-----------DAHİLİ-------------------
 import { RootParamList } from "../types/navigation";
 import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { Recipe } from "../types/Recipe";
-import { getRecipes } from "../services/recipeServices";
+import { getRecipes, updateRecipes } from "../services/recipeServices";
 import HomeScreenStyles from "../styles/HomeScreenStyles";
 import { Colors } from "../styles/globalStyles";
 
@@ -19,6 +25,7 @@ export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
 
   const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -26,9 +33,24 @@ export default function HomeScreen() {
     setRefreshing(true);
     try {
       const loadedUserRecipes = await getRecipes();
+      const combined = [...DEFAULT_RECIPES];
+      loadedUserRecipes.forEach((userRecipe) => {
+        const existingDefaultIndex = combined.findIndex(
+          (defaultRecipe) => defaultRecipe.id === userRecipe.id
+        );
+        if (existingDefaultIndex > -1) {
+          combined[existingDefaultIndex] = userRecipe;
+        } else {
+          combined.push(userRecipe);
+        }
+      });
+
+      setRecipes(combined);
       setUserRecipes(loadedUserRecipes);
     } catch (error) {
       console.log("Recipe Upload Error");
+      setRecipes([]);
+      setUserRecipes([]);
     } finally {
       setRefreshing(false);
     }
@@ -40,31 +62,18 @@ export default function HomeScreen() {
     }, [loadAllRecipesFromStorage])
   );
 
-  const allRecipes = useMemo(() => {
-    const combined = [...DEFAULT_RECIPES];
-
-    userRecipes.forEach((userRecipe) => {
-      const existingDefaultIndex = combined.findIndex(
-        (defaultRecipe) => defaultRecipe.id === userRecipe.id
-      );
-
-      if (existingDefaultIndex > -1) {
-        combined[existingDefaultIndex] = userRecipe;
-      } else {
-        combined.push(userRecipe);
-      }
-    });
-    return combined;
-  }, [userRecipes]);
+  const allRecipesDisplay = useMemo(() => {
+    return recipes;
+  }, [recipes]);
 
   const onChangeSearch = (query: string) => setSearchQuery(query);
 
   const filteredRecipes = useMemo(() => {
     if (!searchQuery) {
-      return allRecipes;
+      return allRecipesDisplay;
     }
     const lowerCaseQuery = searchQuery.toLowerCase();
-    return allRecipes.filter(
+    return allRecipesDisplay.filter(
       (recipe) =>
         recipe.title.toLowerCase().includes(lowerCaseQuery) ||
         (recipe.description &&
@@ -82,10 +91,27 @@ export default function HomeScreen() {
           tagItem.toLowerCase().includes(lowerCaseQuery)
         )
     );
-  }, [allRecipes, searchQuery]);
+  }, [allRecipesDisplay, searchQuery]);
 
   const handleRecipePress = (recipeId: string) => {
     console.log("Recipe details will be shown:", recipeId);
+  };
+
+  const handleToggleFavorite = async (id: string) => {
+    try {
+      const recipeToToggle = recipes.find((recipe) => recipe.id === id);
+      if (recipeToToggle) {
+        const updatedRecipe = {
+          ...recipeToToggle,
+          isFavorite: !recipeToToggle.isFavorite,
+        };
+        await updateRecipes(updatedRecipe);
+        loadAllRecipesFromStorage();
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error");
+    }
   };
 
   return (
@@ -109,11 +135,11 @@ export default function HomeScreen() {
           inputStyle={{ color: Colors.text }}
         />
 
-        {filteredRecipes.length === 0 && allRecipes.length > 0 ? (
+        {filteredRecipes.length === 0 && allRecipesDisplay.length > 0 ? (
           <Text style={HomeScreenStyles.noRecipesText}>
             No recipes found matching your criteria.
           </Text>
-        ) : filteredRecipes.length === 0 && allRecipes.length === 0 ? (
+        ) : filteredRecipes.length === 0 && allRecipesDisplay.length === 0 ? (
           <Text style={HomeScreenStyles.noRecipesText}>
             You don't have any recipes yet. Add your first recipe!
           </Text>
@@ -136,6 +162,19 @@ export default function HomeScreen() {
                   </Text>
                 </View>
               )}
+
+              <View style={HomeScreenStyles.favoriteIconContainer}>
+                <TouchableOpacity
+                  onPress={() => handleToggleFavorite(recipe.id)}
+                >
+                  <MaterialCommunityIcons
+                    name={recipe.isFavorite ? "heart" : "heart-outline"} // Favori ise dolu, değilse boş kalp
+                    color={recipe.isFavorite ? Colors.accent : Colors.white}
+                    size={24}
+                  />
+                </TouchableOpacity>
+              </View>
+
               <Card.Content style={HomeScreenStyles.cardContent}>
                 <Text style={HomeScreenStyles.cardTitle}>{recipe.title}</Text>
                 {recipe.description && (

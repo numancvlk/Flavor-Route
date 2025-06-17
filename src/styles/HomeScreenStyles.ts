@@ -79,6 +79,16 @@ const HomeScreenStyles = StyleSheet.create({
     bottom: 0,
     backgroundColor: Colors.accent,
   },
+  favoriteIconContainer: {
+    position: "absolute",
+    top: Spacing.small / 2,
+    right: Spacing.small / 2,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderRadius: Spacing.xLarge / 2,
+    padding: Spacing.small / 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default HomeScreenStyles;

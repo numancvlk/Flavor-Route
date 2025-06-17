@@ -121,21 +121,17 @@ export default function FavoritesScreen() {
                     </Text>
                   </View>
                 )}
-                {/* FAVORİ İKONU İÇİN GÜNCEL YAPI */}
                 <View style={FavoritesScreenStyles.favoriteIconContainer}>
                   <TouchableOpacity
                     onPress={() => handleToggleFavorite(recipe.id)}
                   >
                     <MaterialCommunityIcons
-                      // Her zaman dolu kalp gösterir, çünkü zaten favori olanları listeliyoruz.
-                      // Tıklandığında listeden gideceği için dolu kalp yeterli.
                       name={"heart"}
-                      color={Colors.accent} // Dolu kalp ikon rengi (örneğin pembe/turkuaz)
+                      color={Colors.accent}
                       size={24}
                     />
                   </TouchableOpacity>
                 </View>
-                {/* FAVORİ İKONU YAPISI SONU */}
 
                 <Card.Content style={FavoritesScreenStyles.cardContent}>
                   <Text
