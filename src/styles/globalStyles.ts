@@ -27,6 +27,59 @@ export const FontSizes = {
   xLarge: 24,
   title: 28,
 };
+
+export const Typography = {
+  fontFamily: {
+    regular: "System",
+    medium: "System",
+    semiBold: "System",
+    bold: "System",
+  },
+  fontSize: {
+    small: FontSizes.small,
+    medium: FontSizes.medium,
+    large: FontSizes.large,
+    extraLarge: FontSizes.xLarge,
+    title: FontSizes.title,
+  },
+
+  h1: {
+    fontSize: FontSizes.title,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  h2: {
+    fontSize: FontSizes.xLarge,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  h3: {
+    fontSize: FontSizes.large,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  h4: {
+    fontSize: FontSizes.medium,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  h5: {
+    fontSize: FontSizes.large,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  h6: {
+    fontSize: FontSizes.medium,
+    fontWeight: "bold" as "bold",
+    color: Colors.text,
+  },
+  body1: { fontSize: FontSizes.medium, color: Colors.text },
+  body2: { fontSize: FontSizes.small, color: Colors.text },
+  caption: { fontSize: FontSizes.small, color: Colors.mediumGray },
+  button: { fontSize: FontSizes.medium, fontWeight: "bold" as "bold" },
+  lineHeightLarge: 24,
+};
+
 export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
@@ -44,18 +97,3 @@ export const globalStyles = StyleSheet.create({
     elevation: 4,
   },
 });
-
-export const Typography = {
-  fontFamily: {
-    regular: "System", // Varsayılan sistem fontu
-    medium: "System",
-    semiBold: "System",
-    bold: "System",
-  },
-  fontSize: {
-    small: 12,
-    medium: 16,
-    large: 20,
-    extraLarge: 24,
-  },
-};

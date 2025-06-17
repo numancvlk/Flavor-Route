@@ -3,6 +3,8 @@ export type RootParamList = {
   MyRecipesScreen: undefined;
   FavoritesScreen: undefined;
   AddRecipeScreen: undefined;
+  RecipeDetailScreen: { recipeId: string };
+  CookingModeScreen: { recipeId: string };
 };
 
 declare global {

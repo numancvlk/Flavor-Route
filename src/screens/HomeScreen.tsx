@@ -93,8 +93,8 @@ export default function HomeScreen() {
     );
   }, [allRecipesDisplay, searchQuery]);
 
-  const handleRecipePress = (recipeId: string) => {
-    console.log("Recipe details will be shown:", recipeId);
+  const handleRecipePress = (id: string) => {
+    navigation.navigate("RecipeDetailScreen", { recipeId: id });
   };
 
   const handleToggleFavorite = async (id: string) => {

@@ -64,8 +64,7 @@ export default function FavoritesScreen() {
   }, [searchQuery, favoriteRecipes]);
 
   const handleRecipePress = (id: string) => {
-    // navigation.navigate("RecipeDetail", { recipeId: id });
-    alert("Coming Soon");
+    navigation.navigate("RecipeDetailScreen", { recipeId: id });
   };
 
   const handleToggleFavorite = async (id: string) => {
