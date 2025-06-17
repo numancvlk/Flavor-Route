@@ -25,6 +25,7 @@ export interface Recipe {
   categories: string[];
   tags: string[];
   isFavorite: boolean;
+  isUserAdded?: boolean;
   createdAt: string;
   updatedAt: string;
 }

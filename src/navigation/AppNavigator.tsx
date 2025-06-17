@@ -6,6 +6,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import AddRecipeScreen from "../screens/AddRecipeScreen";
+import MyRecipesScreen from "../screens/MyRecipesScreen";
 
 const TAB = createBottomTabNavigator<RootParamList>();
 
@@ -48,6 +49,21 @@ export default function AppNavigator() {
           title: "Favorites",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="heart" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <TAB.Screen
+        name="MyRecipesScreen"
+        component={MyRecipesScreen}
+        options={{
+          title: "My Recipes",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="notebook-multiple"
+              color={color}
+              size={size}
+            />
           ),
         }}
       />

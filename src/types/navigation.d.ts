@@ -1,5 +1,6 @@
 export type RootParamList = {
   HomeScreen: undefined;
+  MyRecipesScreen: undefined;
   FavoritesScreen: undefined;
   AddRecipeScreen: undefined;
 };
