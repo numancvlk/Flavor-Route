@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Colors, Spacing, FontSizes, globalStyles } from "./globalStyles"; // globalStyles'ı import et
+import { Colors, Spacing, FontSizes, globalStyles } from "./globalStyles";
 
 const AddRecipeScreenStyles = StyleSheet.create({
   mainContainer: {

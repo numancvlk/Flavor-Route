@@ -168,7 +168,7 @@ export default function HomeScreen() {
                   onPress={() => handleToggleFavorite(recipe.id)}
                 >
                   <MaterialCommunityIcons
-                    name={recipe.isFavorite ? "heart" : "heart-outline"} // Favori ise dolu, değilse boş kalp
+                    name={recipe.isFavorite ? "heart" : "heart-outline"}
                     color={recipe.isFavorite ? Colors.accent : Colors.white}
                     size={24}
                   />

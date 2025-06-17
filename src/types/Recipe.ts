@@ -16,9 +16,9 @@ export interface Recipe {
   id: string;
   title: string;
   description?: string;
-  prepTime?: number; //Hazırlık Süresi (dakika)
-  cookTime?: number; //Pişirme Süresi (dakika)
-  servings?: number; //Porsiyon Sayısı
+  prepTime?: number;
+  cookTime?: number;
+  servings?: number;
   ingredients: Ingredient[];
   instructions: Instruction[];
   photos?: string[];
