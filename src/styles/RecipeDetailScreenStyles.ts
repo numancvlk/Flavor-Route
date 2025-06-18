@@ -131,4 +131,17 @@ export const RecipeDetailScreenStyles = StyleSheet.create({
     color: Colors.white,
     paddingVertical: Spacing.small,
   },
+  deleteButton: {
+    position: "absolute",
+    bottom: Spacing.medium,
+    left: Spacing.medium,
+    right: Spacing.medium,
+    backgroundColor: Colors.accent,
+    borderRadius: Spacing.medium,
+    elevation: 5,
+    shadowColor: Colors.darkGray,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
 });

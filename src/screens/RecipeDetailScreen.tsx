@@ -12,7 +12,11 @@ import { Appbar, List, Chip, Button } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { RootParamList } from "../types/navigation";
 import { Recipe } from "../types/Recipe";
-import { getRecipes, updateRecipes } from "../services/recipeServices";
+import {
+  getRecipes,
+  updateRecipes,
+  deleteRecipes,
+} from "../services/recipeServices";
 import { Colors, Spacing, Typography } from "../styles/globalStyles";
 import { RecipeDetailScreenStyles } from "../styles/RecipeDetailScreenStyles";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -57,7 +61,6 @@ export default function RecipeDetailScreen() {
     loadRecipeDetails();
   }, [loadRecipeDetails]);
 
-  // Favori durumunu değiştiren fonksiyon
   const handleToggleFavorite = async () => {
     if (!recipe) return;
 
@@ -105,6 +108,35 @@ export default function RecipeDetailScreen() {
       </View>
     );
   }
+
+  const handleRecipeDelete = () => {
+    if (!recipe) {
+      Alert.alert("Tarif Yok", "Silinecek Tarif Bulunamadı");
+      return;
+    }
+
+    Alert.alert(
+      "Tarifi Sil",
+      `${recipe.title} tarifini silmek istiyor musunuz?`,
+      [
+        { text: "İptal", style: "cancel" },
+        {
+          text: "Sil",
+          onPress: async () => {
+            try {
+              await deleteRecipes(recipe.id);
+              Alert.alert("Tarif Silindi", "Tarif Başarıyla Silindi");
+              navigation.navigate("HomeScreen");
+            } catch (error) {
+              console.error("Tarif Silinmedi");
+            }
+          },
+          style: "destructive",
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <View style={RecipeDetailScreenStyles.container}>
@@ -273,6 +305,10 @@ export default function RecipeDetailScreen() {
           Tarifi Yap
         </Button>
       )}
+
+      <Button icon="delete" onPress={handleRecipeDelete}>
+        Tarifi Sil
+      </Button>
     </View>
   );
 }
