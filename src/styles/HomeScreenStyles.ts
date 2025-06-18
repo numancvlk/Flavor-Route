@@ -1,94 +1,93 @@
 import { StyleSheet } from "react-native";
-import {
-  Colors,
-  Spacing,
-  FontSizes,
-  globalStyles,
-  Typography,
-} from "./globalStyles";
 
-const HomeScreenStyles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: Colors.background,
+import { Colors, Typography, Spacing, GlobalStyles } from "./globalStyles";
+
+export const HomeScreenStyles = StyleSheet.create({
+  container: {
+    ...GlobalStyles.container,
   },
   scrollViewContent: {
     padding: Spacing.medium,
-    paddingBottom: Spacing.xLarge * 2,
+    paddingBottom: Spacing.xxLarge * 2,
   },
   searchBar: {
     marginBottom: Spacing.medium,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.cardBackground,
     borderRadius: Spacing.small,
-    ...globalStyles.shadow,
+    ...GlobalStyles.shadow,
+  },
+  noRecipesText: {
+    textAlign: "center",
+    marginTop: Spacing.xLarge,
+    fontSize: Typography.fontSize.medium,
+    color: Colors.lightText,
+    fontFamily: Typography.fontFamily,
+    fontWeight: Typography.fontWeight.regular,
   },
   recipeCard: {
     marginBottom: Spacing.medium,
     borderRadius: Spacing.small,
     overflow: "hidden",
-    ...globalStyles.shadow,
+    backgroundColor: Colors.cardBackground,
+    ...GlobalStyles.shadow,
   },
   cardCover: {
-    height: 180,
-    width: "100%",
+    height: 200,
+    resizeMode: "cover",
   },
   noImagePlaceholder: {
-    width: "100%",
-    height: 180,
+    height: 200,
     backgroundColor: Colors.lightGray,
     justifyContent: "center",
     alignItems: "center",
   },
   noImageText: {
     color: Colors.mediumGray,
-    fontSize: FontSizes.medium,
-    fontFamily: Typography.fontFamily.semiBold,
+    fontSize: Typography.fontSize.medium,
+    fontFamily: Typography.fontFamily,
+    fontWeight: Typography.fontWeight.medium,
+  },
+  favoriteIconContainer: {
+    position: "absolute",
+    top: Spacing.small,
+    right: Spacing.small,
+    backgroundColor: "rgba(0,0,0,0.4)",
+    borderRadius: 20,
+    padding: Spacing.xSmall,
+    zIndex: 1,
   },
   cardContent: {
     padding: Spacing.medium,
   },
   cardTitle: {
-    fontSize: FontSizes.large,
-    fontFamily: Typography.fontFamily.bold,
+    fontSize: Typography.fontSize.large,
+    fontWeight: Typography.fontWeight.bold,
     color: Colors.text,
-    marginBottom: Spacing.small / 2,
+    marginBottom: Spacing.xSmall,
+    fontFamily: Typography.fontFamily,
   },
   cardParagraph: {
-    fontSize: FontSizes.small,
-    fontFamily: Typography.fontFamily.regular,
-    color: Colors.darkGray,
+    fontSize: Typography.fontSize.medium,
+    color: Colors.lightText,
     marginBottom: Spacing.small,
+    fontFamily: Typography.fontFamily,
   },
-  cardCategory: {
-    fontSize: FontSizes.small,
-    fontFamily: Typography.fontFamily.medium,
-    color: Colors.mediumGray,
-    marginTop: Spacing.small / 2,
-  },
-  noRecipesText: {
-    textAlign: "center",
-    marginTop: Spacing.xLarge,
-    fontSize: FontSizes.medium,
-    color: Colors.darkGray,
-    fontFamily: Typography.fontFamily.regular,
+  cardCategoryTag: {
+    backgroundColor: Colors.lightGray,
+    color: Colors.text,
+    fontSize: Typography.fontSize.small,
+    fontFamily: Typography.fontFamily,
+    paddingHorizontal: Spacing.small,
+    paddingVertical: Spacing.xSmall,
+    borderRadius: Spacing.small,
+    marginRight: Spacing.xSmall,
+    marginBottom: Spacing.xSmall,
   },
   fab: {
     position: "absolute",
     margin: Spacing.large,
     right: 0,
-    bottom: 0,
-    backgroundColor: Colors.accent,
-  },
-  favoriteIconContainer: {
-    position: "absolute",
-    top: Spacing.small / 2,
-    right: Spacing.small / 2,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    borderRadius: Spacing.xLarge / 2,
-    padding: Spacing.small / 2,
-    justifyContent: "center",
-    alignItems: "center",
+    bottom: Spacing.medium,
+    backgroundColor: Colors.primary,
   },
 });
-
-export default HomeScreenStyles;

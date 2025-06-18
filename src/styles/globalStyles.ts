@@ -1,99 +1,70 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 export const Colors = {
-  primary: "#6200EE",
-  accent: "#03DAC4",
-  background: "#F6F6F6",
+  primary: "#FF6347",
+  accent: "#FFD700",
+  background: "#F8F8F8",
+  cardBackground: "#FFFFFF",
   text: "#333333",
-  lightGray: "#CCCCCC",
-  mediumGray: "#999999",
-  darkGray: "#666666",
+  lightText: "#666666",
   white: "#FFFFFF",
-  red: "#FF0000",
-  green: "#4CAF50",
+  darkGray: "#444444",
+  mediumGray: "#BBBBBB",
+  lightGray: "#EEEEEE",
+  error: "#DC3545",
+  success: "#28A745",
+};
+
+export const Typography = {
+  fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
+  fontSize: {
+    xSmall: 10,
+    small: 12,
+    medium: 16,
+    large: 20,
+    xLarge: 24,
+    xxLarge: 32,
+    xxxLarge: 40,
+  },
+  fontWeight: {
+    light: "300",
+    regular: "400",
+    medium: "500",
+    bold: "700",
+    extraBold: "900",
+  } as const,
 };
 
 export const Spacing = {
+  xSmall: 4,
   small: 8,
   medium: 16,
   large: 24,
   xLarge: 32,
+  xxLarge: 40,
 };
 
-export const FontSizes = {
-  small: 12,
-  medium: 16,
-  large: 20,
-  xLarge: 24,
-  title: 28,
-};
-
-export const Typography = {
-  fontFamily: {
-    regular: "System",
-    medium: "System",
-    semiBold: "System",
-    bold: "System",
-  },
-  fontSize: {
-    small: FontSizes.small,
-    medium: FontSizes.medium,
-    large: FontSizes.large,
-    extraLarge: FontSizes.xLarge,
-    title: FontSizes.title,
-  },
-
-  h1: {
-    fontSize: FontSizes.title,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  h2: {
-    fontSize: FontSizes.xLarge,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  h3: {
-    fontSize: FontSizes.large,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  h4: {
-    fontSize: FontSizes.medium,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  h5: {
-    fontSize: FontSizes.large,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  h6: {
-    fontSize: FontSizes.medium,
-    fontWeight: "bold" as "bold",
-    color: Colors.text,
-  },
-  body1: { fontSize: FontSizes.medium, color: Colors.text },
-  body2: { fontSize: FontSizes.small, color: Colors.text },
-  caption: { fontSize: FontSizes.small, color: Colors.mediumGray },
-  button: { fontSize: FontSizes.medium, fontWeight: "bold" as "bold" },
-  lineHeightLarge: 24,
-};
-
-export const globalStyles = StyleSheet.create({
+export const GlobalStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
-    padding: Spacing.medium,
+  },
+  headerText: {
+    fontSize: Typography.fontSize.xLarge,
+    fontWeight: "bold",
+    color: Colors.text,
+    fontFamily: Typography.fontFamily,
+  },
+  paragraphText: {
+    fontSize: Typography.fontSize.medium,
+    color: Colors.lightText,
+    fontFamily: Typography.fontFamily,
   },
   shadow: {
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4,
+    shadowColor: Colors.darkGray,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
   },
 });

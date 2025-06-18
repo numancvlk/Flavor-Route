@@ -18,7 +18,7 @@ import { RootParamList } from "../types/navigation";
 import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { Recipe } from "../types/Recipe";
 import { getRecipes, updateRecipes } from "../services/recipeServices";
-import HomeScreenStyles from "../styles/HomeScreenStyles";
+import { HomeScreenStyles } from "../styles/HomeScreenStyles";
 import { Colors } from "../styles/globalStyles";
 
 export default function HomeScreen() {
@@ -187,7 +187,7 @@ export default function HomeScreen() {
                   </Text>
                 )}
                 {recipe.categories.length > 0 && (
-                  <Text style={HomeScreenStyles.cardCategory}>
+                  <Text style={HomeScreenStyles.cardCategoryTag}>
                     Category:{recipe.categories.join(", ")}
                   </Text>
                 )}
