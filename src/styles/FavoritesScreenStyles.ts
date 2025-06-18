@@ -1,40 +1,55 @@
 import { StyleSheet, Dimensions } from "react-native";
-import { Colors, Spacing, FontSizes, globalStyles } from "./globalStyles";
+import { Colors, Typography, Spacing, GlobalStyles } from "./globalStyles";
 
-const screenWidth = Dimensions.get("window").width;
-const cardWidth = screenWidth / 2 - Spacing.medium;
+const { width } = Dimensions.get("window");
+const cardMargin = Spacing.small;
+const cardWidth = (width - Spacing.medium * 2 - cardMargin) / 2;
+
 export const FavoritesScreenStyles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-    backgroundColor: Colors.background,
+    ...GlobalStyles.container,
+    padding: Spacing.medium,
   },
   searchBar: {
-    margin: Spacing.medium,
+    marginBottom: Spacing.medium,
+    backgroundColor: Colors.cardBackground,
     borderRadius: Spacing.small,
-    backgroundColor: Colors.white,
+    ...GlobalStyles.shadow,
   },
   searchBarInput: {
-    minHeight: Spacing.xLarge + Spacing.small,
-    fontSize: FontSizes.medium,
     color: Colors.text,
+    fontFamily: Typography.fontFamily,
+    fontSize: Typography.fontSize.medium,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Spacing.large,
+  },
+  loadingText: {
+    fontSize: Typography.fontSize.large,
+    color: Colors.lightText,
+    fontFamily: Typography.fontFamily,
+    fontWeight: Typography.fontWeight.medium,
   },
   recipesGrid: {
-    padding: Spacing.small,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    paddingBottom: Spacing.large,
+    paddingBottom: Spacing.medium,
   },
   recipeCard: {
     width: cardWidth,
-    marginBottom: Spacing.small,
+    marginBottom: cardMargin,
+    backgroundColor: Colors.cardBackground,
     borderRadius: Spacing.small,
     overflow: "hidden",
-    backgroundColor: Colors.white,
-    ...globalStyles.shadow,
+    ...GlobalStyles.shadow,
   },
   cardCover: {
     height: 120,
+    resizeMode: "cover",
   },
   noImagePlaceholder: {
     height: 120,
@@ -43,71 +58,78 @@ export const FavoritesScreenStyles = StyleSheet.create({
     alignItems: "center",
   },
   noImageText: {
-    color: Colors.darkGray,
-    fontSize: FontSizes.medium,
+    color: Colors.mediumGray,
+    fontSize: Typography.fontSize.small,
+    fontFamily: Typography.fontFamily,
+    fontWeight: Typography.fontWeight.medium,
+    textAlign: "center",
   },
   favoriteIconContainer: {
     position: "absolute",
-    top: Spacing.small / 2,
-    right: Spacing.small / 2,
+    top: Spacing.xSmall,
+    right: Spacing.xSmall,
     backgroundColor: "rgba(0,0,0,0.4)",
-    borderRadius: Spacing.xLarge / 2,
-    padding: Spacing.small / 2,
-    justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 15,
+    padding: Spacing.xSmall / 2,
+    zIndex: 1,
   },
   cardContent: {
     padding: Spacing.small,
   },
   cardTitle: {
-    fontSize: FontSizes.medium,
-    fontWeight: "bold",
-    marginBottom: Spacing.small / 2,
+    fontSize: Typography.fontSize.medium,
+    fontWeight: Typography.fontWeight.bold,
     color: Colors.text,
+    marginBottom: Spacing.xSmall,
+    fontFamily: Typography.fontFamily,
   },
   timeContainer: {
     flexDirection: "row",
-    marginBottom: Spacing.small / 2,
+    alignItems: "center",
+    marginTop: Spacing.xSmall,
+    marginBottom: Spacing.xSmall,
   },
   timeItem: {
     flexDirection: "row",
     alignItems: "center",
     marginRight: Spacing.small,
+    backgroundColor: Colors.lightGray,
+    borderRadius: Spacing.small,
+    paddingHorizontal: Spacing.small,
+    paddingVertical: Spacing.xSmall,
   },
   timeText: {
-    fontSize: FontSizes.small,
+    fontSize: Typography.fontSize.xSmall,
     color: Colors.darkGray,
+    fontFamily: Typography.fontFamily,
+    fontWeight: Typography.fontWeight.medium,
   },
   servingsText: {
-    fontSize: FontSizes.small,
-    color: Colors.darkGray,
+    fontSize: Typography.fontSize.small,
+    color: Colors.lightText,
+    fontFamily: Typography.fontFamily,
+    marginTop: Spacing.xSmall,
   },
   noFavoritesContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: Spacing.large,
-    minHeight: Dimensions.get("window").height * 0.5,
+    marginTop: Spacing.xLarge,
+    paddingHorizontal: Spacing.large,
   },
   noFavoritesText: {
-    fontSize: FontSizes.large,
-    fontWeight: "bold",
-    color: Colors.darkGray,
+    fontSize: Typography.fontSize.large,
+    fontWeight: Typography.fontWeight.bold,
+    color: Colors.text,
     textAlign: "center",
     marginBottom: Spacing.small,
+    fontFamily: Typography.fontFamily,
   },
   noFavoritesSubText: {
-    fontSize: FontSizes.medium,
-    color: Colors.mediumGray,
+    fontSize: Typography.fontSize.medium,
+    color: Colors.lightText,
     textAlign: "center",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingText: {
-    fontSize: FontSizes.large,
-    color: Colors.darkGray,
+    lineHeight: Typography.fontSize.medium * 1.5,
+    fontFamily: Typography.fontFamily,
   },
 });
