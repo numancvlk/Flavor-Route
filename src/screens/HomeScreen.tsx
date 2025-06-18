@@ -19,7 +19,6 @@ import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { Recipe } from "../types/Recipe";
 import { getRecipes, updateRecipes } from "../services/recipeServices";
 import { HomeScreenStyles } from "../styles/HomeScreenStyles";
-import { Colors } from "../styles/globalStyles";
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
@@ -113,6 +112,21 @@ export default function HomeScreen() {
       console.error(error);
       alert("Error");
     }
+  };
+
+  const Colors = {
+    primary: "#FF6347",
+    accent: "#FFD700",
+    background: "#F8F8F8",
+    cardBackground: "#FFFFFF",
+    text: "#333333",
+    lightText: "#666666",
+    white: "#FFFFFF",
+    darkGray: "#444444",
+    mediumGray: "#BBBBBB",
+    lightGray: "#EEEEEE",
+    error: "#DC3545",
+    success: "#28A745",
   };
 
   return (

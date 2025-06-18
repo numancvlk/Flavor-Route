@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
@@ -18,10 +19,9 @@ import {
   updateRecipes,
   deleteRecipes,
 } from "../services/recipeServices";
-import { Colors, Spacing, Typography } from "../styles/globalStyles";
-import { RecipeDetailScreenStyles } from "../styles/RecipeDetailScreenStyles";
-import { StackNavigationProp } from "@react-navigation/stack";
 import { DEFAULT_RECIPES } from "../data/defaultRecipes";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RecipeDetailScreenStyles } from "../styles/RecipeDetailScreenStyles";
 
 type RecipeDetailScreenRouteProp = RouteProp<
   RootParamList,
@@ -29,6 +29,56 @@ type RecipeDetailScreenRouteProp = RouteProp<
 >;
 
 type RecipeDetailScreenNavigationProp = StackNavigationProp<RootParamList>;
+
+const Colors = {
+  primary: "#FF6347",
+  accent: "#FFD700",
+  background: "#F8F8F8",
+  cardBackground: "#FFFFFF",
+  text: "#333333",
+  lightText: "#666666",
+  white: "#FFFFFF",
+  darkGray: "#444444",
+  mediumGray: "#BBBBBB",
+  lightGray: "#EEEEEE",
+  error: "#DC3545",
+  success: "#28A745",
+};
+
+// Tipografi tanımları
+const Typography = {
+  fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
+  fontSize: {
+    xSmall: 10,
+    small: 12,
+    medium: 16,
+    large: 20,
+    xLarge: 24,
+    xxLarge: 32,
+    xxxLarge: 40,
+  },
+  fontWeight: {
+    light: "300",
+    regular: "400",
+    medium: "500",
+    bold: "700",
+    extraBold: "900",
+  },
+  body1: {
+    fontSize: 16,
+    color: Colors.text,
+    fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
+  },
+};
+
+const Spacing = {
+  xSmall: 4,
+  small: 8,
+  medium: 16,
+  large: 24,
+  xLarge: 32,
+  xxLarge: 40,
+};
 
 export default function RecipeDetailScreen() {
   const navigation = useNavigation<RecipeDetailScreenNavigationProp>();
@@ -56,14 +106,6 @@ export default function RecipeDetailScreen() {
         }
       });
 
-      console.log(
-        "RecipeDetailScreen: Tüm birleştirilmiş tarifler (ID ve Başlık):",
-        JSON.stringify(
-          combinedRecipes.map((r) => ({ id: r.id, title: r.title })),
-          null,
-          2
-        )
-      );
       const foundRecipe = combinedRecipes.find((r) => r.id === recipeId);
       if (foundRecipe) {
         setRecipe(foundRecipe);
@@ -72,7 +114,6 @@ export default function RecipeDetailScreen() {
         navigation.goBack();
       }
     } catch (error) {
-      console.error("Tarif detayları yüklenirken hata:", error);
       Alert.alert("Hata", "Tarif detayları yüklenirken bir sorun oluştu.");
       navigation.goBack();
     } finally {
@@ -100,11 +141,7 @@ export default function RecipeDetailScreen() {
       };
       await updateRecipes(updatedRecipe);
       setRecipe(updatedRecipe);
-      console.log(
-        `Tarif favori durumu değişti: ${updatedRecipe.title} -> ${updatedRecipe.isFavorite}`
-      );
     } catch (error) {
-      console.error("Favori durumu güncellenemedi:", error);
       Alert.alert("Hata", "Favori durumu güncellenirken bir sorun oluştu.");
     }
   };
@@ -131,6 +168,7 @@ export default function RecipeDetailScreen() {
           mode="contained"
           onPress={() => navigation.goBack()}
           style={{ marginTop: Spacing.medium }}
+          theme={{ colors: { primary: Colors.primary } }}
         >
           Geri Dön
         </Button>
@@ -292,6 +330,9 @@ export default function RecipeDetailScreen() {
                   key={index}
                   style={RecipeDetailScreenStyles.chip}
                   textStyle={RecipeDetailScreenStyles.chipText}
+                  theme={{
+                    colors: { primary: Colors.primary, onSurface: Colors.text },
+                  }}
                 >
                   {category}
                 </Chip>
@@ -311,6 +352,9 @@ export default function RecipeDetailScreen() {
                   key={index}
                   style={RecipeDetailScreenStyles.chip}
                   textStyle={RecipeDetailScreenStyles.chipText}
+                  theme={{
+                    colors: { primary: Colors.primary, onSurface: Colors.text },
+                  }}
                 >
                   {tag}
                 </Chip>
@@ -338,16 +382,33 @@ export default function RecipeDetailScreen() {
           onPress={handleStartCooking}
           style={RecipeDetailScreenStyles.startButton}
           labelStyle={RecipeDetailScreenStyles.startButtonLabel}
+          theme={{
+            colors: { primary: Colors.primary, onPrimary: Colors.white },
+          }}
         >
           Tarifi Yap
         </Button>
       )}
 
-      <Button icon="delete" onPress={handleRecipeDelete}>
+      <Button
+        icon="delete"
+        onPress={handleRecipeDelete}
+        style={RecipeDetailScreenStyles.deleteButton}
+        labelStyle={RecipeDetailScreenStyles.deleteButtonLabel}
+        theme={{ colors: { primary: Colors.error, onSurface: Colors.error } }}
+      >
         Tarifi Sil
       </Button>
 
-      <Button icon="edit" onPress={handleRecipeEdit}>
+      <Button
+        icon="pencil-outline"
+        onPress={handleRecipeEdit}
+        style={RecipeDetailScreenStyles.editButton}
+        labelStyle={RecipeDetailScreenStyles.editButtonLabel}
+        theme={{
+          colors: { primary: Colors.primary, onSurface: Colors.primary },
+        }}
+      >
         Tarifi Düzenle
       </Button>
     </View>

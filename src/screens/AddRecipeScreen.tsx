@@ -16,8 +16,7 @@ import { Recipe, Ingredient, Instruction } from "../types/Recipe";
 import { addRecipes, updateRecipes } from "../services/recipeServices";
 import { RootParamList } from "../types/navigation";
 //--------------STYLES-----------------------
-import AddRecipeScreenStyles from "../styles/AddRecipeScreenStyles";
-import { Colors } from "../styles/globalStyles";
+import { AddRecipeScreenStyles } from "../styles/AddRecipeScreenStyles";
 
 const predefinedCategories = [
   "Snacks",
@@ -238,7 +237,6 @@ export default function AddRecipeScreen() {
   };
 
   const handleSaveRecipe = async () => {
-    // 1. Validasyonlar (aynı kalacak)
     if (title === "") {
       alert("The title cannot be left empty!");
       return;
@@ -309,7 +307,6 @@ export default function AddRecipeScreen() {
       setTag([]);
       navigation.goBack();
     } catch (error) {
-      console.error("Tarif kaydetme/güncelleme hatası:", error);
       alert("An error occurred while saving/updating the recipe.");
     }
   };
@@ -489,7 +486,7 @@ export default function AddRecipeScreen() {
           mode="outlined"
           onPress={pickImage}
           style={AddRecipeScreenStyles.addButton}
-          labelStyle={{ color: Colors.primary }}
+          labelStyle={{ color: "red" }}
           icon="image-plus"
         >
           Select Photo

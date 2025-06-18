@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, ScrollView, Alert } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import { FAB, Card, Appbar, Searchbar } from "react-native-paper";
 import {
   useNavigation,
@@ -9,12 +9,8 @@ import { useState, useEffect } from "react";
 
 import { RootParamList } from "../types/navigation";
 import { Recipe } from "../types/Recipe";
-import { Colors } from "../styles/globalStyles";
 import { MyRecipesScreenStyles } from "../styles/MyRecipesScreenStyles";
 import { getRecipes, updateRecipes } from "../services/recipeServices";
-
-const screenWidth = Dimensions.get("window").width;
-const cardWidth = screenWidth / 2 - 15;
 
 export default function MyRecipesScreen() {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
@@ -84,6 +80,15 @@ export default function MyRecipesScreen() {
     }
   };
 
+  const Colors = {
+    primary: "#FF6347",
+    accent: "#FFD700",
+    white: "#FFFFFF",
+    text: "#333333",
+    lightText: "#666666",
+    mediumGray: "#BBBBBB",
+  };
+
   return (
     <View style={MyRecipesScreenStyles.mainContainer}>
       <Searchbar
@@ -92,6 +97,14 @@ export default function MyRecipesScreen() {
         value={searchQuery}
         style={MyRecipesScreenStyles.searchBar}
         inputStyle={MyRecipesScreenStyles.searchBarInput}
+        theme={{
+          colors: {
+            primary: Colors.primary,
+            text: Colors.text,
+            placeholder: Colors.lightText,
+            onSurfaceVariant: Colors.lightText,
+          },
+        }}
       />
 
       {isLoading ? (
@@ -108,6 +121,12 @@ export default function MyRecipesScreen() {
                 key={recipe.id}
                 style={MyRecipesScreenStyles.recipeCard}
                 onPress={() => handleRecipePress(recipe.id)}
+                theme={{
+                  colors: {
+                    surface: "#FFFFFF",
+                    onSurface: Colors.text,
+                  },
+                }}
               >
                 {recipe.photos && recipe.photos.length > 0 ? (
                   <Card.Cover

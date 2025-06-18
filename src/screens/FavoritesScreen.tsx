@@ -10,7 +10,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 import { RootParamList } from "../types/navigation";
 import { Recipe } from "../types/Recipe";
-import { Colors } from "../styles/globalStyles";
 import { getRecipes, updateRecipes } from "../services/recipeServices";
 import { FavoritesScreenStyles } from "../styles/FavoritesScreenStyles";
 
@@ -126,7 +125,7 @@ export default function FavoritesScreen() {
                   >
                     <MaterialCommunityIcons
                       name={"heart"}
-                      color={Colors.accent}
+                      color={"red"}
                       size={24}
                     />
                   </TouchableOpacity>
