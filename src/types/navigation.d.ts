@@ -1,10 +1,13 @@
+import { Recipe } from "./Recipe";
+
 export type RootParamList = {
   HomeScreen: undefined;
   MyRecipesScreen: undefined;
   FavoritesScreen: undefined;
-  AddRecipeScreen: undefined;
+  AddRecipeScreen: { recipeToEdit?: Recipe } | undefined;
   RecipeDetailScreen: { recipeId: string };
   CookingModeScreen: { recipeId: string };
+  BottomTabs: undefined;
 };
 
 declare global {

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { Appbar, List, Chip, Button } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -57,9 +58,15 @@ export default function RecipeDetailScreen() {
     }
   }, [recipeId, navigation]);
 
-  useEffect(() => {
-    loadRecipeDetails();
-  }, [loadRecipeDetails]);
+  useFocusEffect(
+    useCallback(() => {
+      loadRecipeDetails();
+      return () => {
+        setLoading(true);
+        setRecipe(null);
+      };
+    }, [loadRecipeDetails])
+  );
 
   const handleToggleFavorite = async () => {
     if (!recipe) return;
@@ -136,6 +143,14 @@ export default function RecipeDetailScreen() {
       ],
       { cancelable: false }
     );
+  };
+
+  const handleRecipeEdit = () => {
+    if (recipe) {
+      navigation.navigate("AddRecipeScreen", { recipeToEdit: recipe });
+    } else {
+      Alert.alert("Tarif Bulunamadı", "İlgili Tarif Bulunamadı");
+    }
   };
 
   return (
@@ -308,6 +323,10 @@ export default function RecipeDetailScreen() {
 
       <Button icon="delete" onPress={handleRecipeDelete}>
         Tarifi Sil
+      </Button>
+
+      <Button icon="edit" onPress={handleRecipeEdit}>
+        Tarifi Düzenle
       </Button>
     </View>
   );

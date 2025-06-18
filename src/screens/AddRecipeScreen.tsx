@@ -1,14 +1,20 @@
 import { View, ScrollView, Image } from "react-native";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextInput, Button, Text, IconButton, Chip } from "react-native-paper";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import * as ImagePicker from "expo-image-picker";
 
 //------------INTERFACES---------------
 import { Recipe, Ingredient, Instruction } from "../types/Recipe";
-import { addRecipes } from "../services/recipeServices";
-
+import { addRecipes, updateRecipes } from "../services/recipeServices";
+import { RootParamList } from "../types/navigation";
 //--------------STYLES-----------------------
 import AddRecipeScreenStyles from "../styles/AddRecipeScreenStyles";
 import { Colors } from "../styles/globalStyles";
@@ -85,15 +91,26 @@ const predefinedTags = [
   "Fast",
   "Easy",
 ];
-
+type AddRecipeScreenRouteProp = RouteProp<RootParamList, "AddRecipeScreen">;
+type AddRecipeScreenNavigationProp = StackNavigationProp<
+  RootParamList,
+  "AddRecipeScreen"
+>;
 export default function AddRecipeScreen() {
-  const navigation = useNavigation();
+  const route = useRoute<AddRecipeScreenRouteProp>();
+  const navigation = useNavigation<AddRecipeScreenNavigationProp>();
+  const recipeToEdit = route.params?.recipeToEdit;
 
+  console.log(recipeToEdit);
+  console.log(
+    "AddRecipeScreen: route.params?.recipeToEdit (alınan) değeri:",
+    JSON.stringify(recipeToEdit, null, 2)
+  );
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [prepTime, setPrepTime] = useState<number>();
-  const [cookTime, setCookTime] = useState<number>();
-  const [servings, setServings] = useState<number>();
+  const [prepTime, setPrepTime] = useState<string>();
+  const [cookTime, setCookTime] = useState<string>();
+  const [servings, setServings] = useState<string>();
   const [ingredient, setIngredient] = useState<Ingredient[]>([]);
   const [instruction, setInstruction] = useState<Instruction[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -101,33 +118,15 @@ export default function AddRecipeScreen() {
   const [tag, setTag] = useState<string[]>([]);
 
   const handlePrepTime = (text: string) => {
-    if (text === "") {
-      setPrepTime(undefined);
-      return;
-    } else {
-      const numericPrep = parseInt(text, 10);
-      setPrepTime(numericPrep);
-    }
+    setPrepTime(text);
   };
 
   const handleCookTime = (text: string) => {
-    if (text === "") {
-      setCookTime(undefined);
-      return;
-    } else {
-      const numericCook = parseInt(text);
-      setCookTime(numericCook);
-    }
+    setCookTime(text);
   };
 
   const handleServings = (text: string) => {
-    if (text === "") {
-      setServings(undefined);
-      return;
-    } else {
-      const numericServings = parseInt(text);
-      setServings(numericServings);
-    }
+    setServings(text);
   };
   //-------------INGREDIENTS ADD REMOVE---------------
   const handleAddIngredient = () => {
@@ -238,8 +237,8 @@ export default function AddRecipeScreen() {
     );
   };
 
-  //-------------SAVE BUTTON-----------------
   const handleSaveRecipe = async () => {
+    // 1. Validasyonlar (aynı kalacak)
     if (title === "") {
       alert("The title cannot be left empty!");
       return;
@@ -260,40 +259,112 @@ export default function AddRecipeScreen() {
       return;
     }
 
-    const newRecipe: Omit<Recipe, "id" | "createdAt" | "updatedAt"> = {
+    const commonRecipeData = {
       title: title.trim(),
       description: description.trim() || undefined,
-      prepTime: prepTime,
-      cookTime: cookTime,
-      servings: servings,
+      prepTime: prepTime ? parseInt(prepTime, 10) : undefined,
+      cookTime: cookTime ? parseInt(cookTime, 10) : undefined,
+      servings: servings ? parseInt(servings, 10) : undefined,
       ingredients: filteredIngredients,
       instructions: filteredInstructions,
       photos: photos,
       categories: categories,
       tags: tag,
-      isFavorite: false,
+      isFavorite: recipeToEdit?.isFavorite ?? false,
       isUserAdded: true,
     };
 
     try {
-      await addRecipes(newRecipe);
-      alert("Recipe saved successfully.");
+      if (recipeToEdit) {
+        const updatedRecipe: Recipe = {
+          ...commonRecipeData,
+          id: recipeToEdit.id,
+          createdAt: recipeToEdit.createdAt,
+          updatedAt: new Date().toISOString(),
+        };
+        await updateRecipes(updatedRecipe);
+        alert("Recipe updated successfully.");
+        console.log(
+          "Tarif başarıyla güncellendi (AddRecipeScreen):",
+          updatedRecipe.title
+        );
+      } else {
+        const newRecipe = await addRecipes(commonRecipeData);
+        alert("Recipe saved successfully.");
+        console.log(
+          "Yeni tarif başarıyla eklendi (AddRecipeScreen):",
+          newRecipe.title
+        );
+      }
+
       setTitle("");
       setDescription("");
       setPrepTime(undefined);
       setCookTime(undefined);
       setServings(undefined);
-      setIngredient([]);
-      setInstruction([]);
+      setIngredient([{ id: uuidv4(), name: "", quantity: "", unit: "" }]);
+      setInstruction([{ id: uuidv4(), step: "" }]);
       setPhotos([]);
       setCategories([]);
       setTag([]);
       navigation.goBack();
     } catch (error) {
-      console.log("Recipe Save Error");
-      return;
+      console.error("Tarif kaydetme/güncelleme hatası:", error);
+      alert("An error occurred while saving/updating the recipe.");
     }
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (recipeToEdit) {
+        setTitle(recipeToEdit.title || "");
+        setDescription(recipeToEdit.description || "");
+        setPrepTime(recipeToEdit.prepTime?.toString() || undefined);
+        setCookTime(recipeToEdit.cookTime?.toString() || undefined);
+        setServings(recipeToEdit.servings?.toString() || undefined);
+
+        setIngredient(
+          recipeToEdit.ingredients?.map((ing) => {
+            if (typeof ing === "string") {
+              return { id: uuidv4(), name: ing, quantity: "", unit: "" };
+            }
+            return {
+              id: ing.id || uuidv4(),
+              name: ing.name || "",
+              quantity: ing.quantity || "",
+              unit: ing.unit || "",
+            };
+          }) || [{ id: uuidv4(), name: "", quantity: "", unit: "" }]
+        );
+
+        setInstruction(
+          recipeToEdit.instructions?.map((inst) => {
+            if (typeof inst === "string") {
+              return { id: uuidv4(), step: inst };
+            }
+            return {
+              id: inst.id || uuidv4(),
+              step: inst.step || "",
+              photoUri: inst.photoUri,
+              timerDuration: inst.timerDuration,
+            };
+          }) || [{ id: uuidv4(), step: "" }]
+        );
+        setCategories(recipeToEdit.categories || []);
+        setTag(recipeToEdit.tags || []);
+      } else {
+        setTitle("");
+        setDescription("");
+        setPrepTime(undefined);
+        setCookTime(undefined);
+        setServings(undefined);
+        setIngredient([{ id: uuidv4(), name: "", quantity: "", unit: "" }]);
+        setInstruction([{ id: uuidv4(), step: "" }]);
+        setCategories([]);
+        setTag([]);
+      }
+    }, [recipeToEdit])
+  );
 
   return (
     <View style={AddRecipeScreenStyles.mainContainer}>

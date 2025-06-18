@@ -1,16 +1,32 @@
 import "react-native-get-random-values";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-//-----------------COMPONENENTS----------------------
 import AppNavigator from "./src/navigation/AppNavigator";
-import { PaperProvider } from "react-native-paper";
+import AddRecipeScreen from "./src/screens/AddRecipeScreen";
+import RecipeDetailScreen from "./src/screens/RecipeDetailScreen";
+import CookingModeScreen from "./src/screens/CookingModeScreen";
+
+import { RootParamList } from "./src/types/navigation";
+
+const RootStack = createStackNavigator<RootParamList>();
 
 export default function App() {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </PaperProvider>
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="BottomTabs" component={AppNavigator} />
+        <RootStack.Screen name="AddRecipeScreen" component={AddRecipeScreen} />
+        <RootStack.Screen
+          name="RecipeDetailScreen"
+          component={RecipeDetailScreen}
+        />
+        <RootStack.Screen
+          name="CookingModeScreen"
+          component={CookingModeScreen}
+        />
+      </RootStack.Navigator>
+    </NavigationContainer>
   );
 }
