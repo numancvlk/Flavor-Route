@@ -26,7 +26,7 @@ export default function HomeScreen() {
 
   const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   const loadAllRecipesFromStorage = useCallback(async () => {
@@ -34,6 +34,7 @@ export default function HomeScreen() {
     try {
       const loadedUserRecipes = await getRecipes();
       const combined = [...DEFAULT_RECIPES];
+
       loadedUserRecipes.forEach((userRecipe) => {
         const existingDefaultIndex = combined.findIndex(
           (defaultRecipe) => defaultRecipe.id === userRecipe.id

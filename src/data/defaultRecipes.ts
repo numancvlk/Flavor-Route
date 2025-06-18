@@ -2,7 +2,7 @@ import { Recipe } from "../types/Recipe";
 
 export const DEFAULT_RECIPES: Recipe[] = [
   {
-    id: "default-1",
+    id: "default-11",
     title: "Classic Fluffy Pancakes",
     description:
       "Light and airy pancakes, perfect for a cozy breakfast or brunch.",
@@ -39,7 +39,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-01T08:00:00Z",
   },
   {
-    id: "default-2",
+    id: "default-22",
     title: "Avocado Toast with Poached Egg",
     description: "A healthy and quick breakfast or snack.",
     prepTime: 5,
@@ -72,7 +72,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-02T08:30:00Z",
   },
   {
-    id: "default-3",
+    id: "default-33",
     title: "Simple Fruit Smoothie",
     description: "A refreshing and nutritious blend of fresh fruits.",
     prepTime: 5,
@@ -112,7 +112,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-03T09:00:00Z",
   },
   {
-    id: "default-4",
+    id: "default-44",
     title: "Oatmeal with Berries and Nuts",
     description: "A wholesome and filling breakfast to start your day right.",
     prepTime: 2,
@@ -158,7 +158,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-04T09:30:00Z",
   },
   {
-    id: "default-5",
+    id: "default-55",
     title: "Yogurt Parfait with Granola",
     description: "Layers of creamy yogurt, crunchy granola, and fresh fruit.",
     prepTime: 5,
@@ -190,7 +190,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
   },
 
   {
-    id: "default-6",
+    id: "default-66",
     title: "Classic Hummus",
     description:
       "A creamy and flavorful Middle Eastern dip, perfect with pita bread or vegetables.",
@@ -237,7 +237,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-06T11:00:00Z",
   },
   {
-    id: "default-7",
+    id: "default-77",
     title: "Baba Ghanoush",
     description: "Smoky eggplant dip, a delightful Middle Eastern meze.",
     prepTime: 15,
@@ -273,7 +273,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-07T11:30:00Z",
   },
   {
-    id: "default-8",
+    id: "default-88",
     title: "Garlic Knots",
     description: "Soft, chewy bread knots coated in garlic butter and parsley.",
     prepTime: 20,
@@ -323,7 +323,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-08T12:00:00Z",
   },
   {
-    id: "default-9",
+    id: "default-99",
     title: "Spicy Edamame",
     description: "Steamed edamame pods tossed with a spicy garlic-chili sauce.",
     prepTime: 5,
@@ -362,7 +362,7 @@ export const DEFAULT_RECIPES: Recipe[] = [
     updatedAt: "2023-03-09T12:30:00Z",
   },
   {
-    id: "default-10",
+    id: "default-100",
     title: "Bruschetta with Tomato and Basil",
     description:
       "Toasted bread topped with fresh tomatoes, basil, garlic, and olive oil.",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {
 import { Colors, Spacing, Typography } from "../styles/globalStyles";
 import { RecipeDetailScreenStyles } from "../styles/RecipeDetailScreenStyles";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 
 type RecipeDetailScreenRouteProp = RouteProp<
   RootParamList,
@@ -40,9 +41,30 @@ export default function RecipeDetailScreen() {
   const loadRecipeDetails = useCallback(async () => {
     setLoading(true);
     try {
-      const allRecipes = await getRecipes();
-      const foundRecipe = allRecipes.find((r) => r.id === recipeId);
+      const loadedUserRecipes = await getRecipes();
 
+      const combinedRecipes = [...DEFAULT_RECIPES];
+
+      loadedUserRecipes.forEach((userRecipe) => {
+        const existingDefaultIndex = combinedRecipes.findIndex(
+          (defaultRecipe) => defaultRecipe.id === userRecipe.id
+        );
+        if (existingDefaultIndex > -1) {
+          combinedRecipes[existingDefaultIndex] = userRecipe;
+        } else {
+          combinedRecipes.push(userRecipe);
+        }
+      });
+
+      console.log(
+        "RecipeDetailScreen: Tüm birleştirilmiş tarifler (ID ve Başlık):",
+        JSON.stringify(
+          combinedRecipes.map((r) => ({ id: r.id, title: r.title })),
+          null,
+          2
+        )
+      );
+      const foundRecipe = combinedRecipes.find((r) => r.id === recipeId);
       if (foundRecipe) {
         setRecipe(foundRecipe);
       } else {
