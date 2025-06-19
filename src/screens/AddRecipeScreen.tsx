@@ -102,14 +102,21 @@ export default function AddRecipeScreen() {
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
-  const [prepTime, setPrepTime] = useState<string>();
-  const [cookTime, setCookTime] = useState<string>();
-  const [servings, setServings] = useState<string>();
+  const [prepTime, setPrepTime] = useState<string | undefined>();
+  const [cookTime, setCookTime] = useState<string | undefined>();
+  const [servings, setServings] = useState<string | undefined>();
   const [ingredient, setIngredient] = useState<Ingredient[]>([]);
   const [instruction, setInstruction] = useState<Instruction[]>([]);
   const [photos, setPhotos] = useState<string[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [tag, setTag] = useState<string[]>([]);
+
+  const [newInstructionStep, setNewInstructionStep] = useState<string>("");
+  const [currentInstructionPhoto, setCurrentInstructionPhoto] = useState<
+    string | null
+  >(null);
+  const [currentInstructionTimer, setCurrentInstructionTimer] =
+    useState<string>("");
 
   const handleNumericInput = (
     text: string,
@@ -143,7 +150,8 @@ export default function AddRecipeScreen() {
   ) => {
     if (field === "unit") {
       if (/^\d+(\.\d+)?$/.test(value.trim()) && value.trim() !== "") {
-        alert(
+        Alert.alert(
+          "Validation Error",
           "Numeric values are not allowed in the unit field. Please enter units such as 'g', 'pieces', etc."
         );
         return;
@@ -152,7 +160,8 @@ export default function AddRecipeScreen() {
 
     if (field === "quantity") {
       if (value.trim() !== "" && !/^\d+(\.\d+)?$/.test(value.trim())) {
-        alert(
+        Alert.alert(
+          "Validation Error",
           "Only numeric values (e.g., 2, 0.5) can be entered in the amount field."
         );
         return;
@@ -161,7 +170,8 @@ export default function AddRecipeScreen() {
 
     if (field === "name") {
       if (/^\d+$/.test(value.trim()) && value.trim() !== "") {
-        alert(
+        Alert.alert(
+          "Validation Error",
           "Only numbers cannot be entered in the ingredient name field. Please enter the name of the ingredient (e.g., Tomato, Flour)."
         );
         return;
@@ -182,13 +192,39 @@ export default function AddRecipeScreen() {
 
   //-----------------INSTRUCTIONS ADD REMOVE---------------
   const handleAddInstruction = () => {
-    setInstruction([...instruction, { id: uuidv4(), step: "" }]);
+    if (newInstructionStep.trim() === "") {
+      Alert.alert("Warning", "Instruction step cannot be empty.");
+      return;
+    }
+
+    const newInstruction: Instruction = {
+      id: uuidv4(),
+      step: newInstructionStep.trim(),
+    };
+
+    if (currentInstructionPhoto) {
+      newInstruction.photoUri = currentInstructionPhoto;
+    }
+    const timerVal = parseFloat(currentInstructionTimer);
+    if (!isNaN(timerVal) && timerVal > 0) {
+      newInstruction.timerDuration = timerVal;
+    }
+
+    setInstruction((prevInstructions) => [...prevInstructions, newInstruction]);
+
+    setNewInstructionStep("");
+    setCurrentInstructionPhoto(null);
+    setCurrentInstructionTimer("");
   };
 
-  const handleInstructionChange = (id: string, value: string) => {
+  const handleInstructionChange = (
+    id: string,
+    field: keyof Instruction,
+    value: string | number | undefined
+  ) => {
     setInstruction((prevInstructions) =>
       prevInstructions.map((ins) =>
-        ins.id === id ? { ...ins, step: value } : ins
+        ins.id === id ? { ...ins, [field]: value } : ins
       )
     );
   };
@@ -200,53 +236,69 @@ export default function AddRecipeScreen() {
   };
 
   //-----------SELECT PHOTOS---------------
-  const pickImage = async () => {
+  const pickImage = async (
+    isInstructionPhoto: boolean = false,
+    instructionId?: string
+  ) => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (status !== "granted") {
-      alert("Media Access Required");
+      Alert.alert(
+        "Media Access Required",
+        "Please grant access to your photo library to select images."
+      );
       return;
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "images",
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
     if (!result.canceled) {
-      setPhotos((prevPhotos) => [...prevPhotos, result.assets[0].uri]);
+      const selectedUri = result.assets[0].uri;
+      if (isInstructionPhoto && instructionId) {
+        handleInstructionChange(instructionId, "photoUri", selectedUri);
+      } else if (isInstructionPhoto && !instructionId) {
+        setCurrentInstructionPhoto(selectedUri);
+      } else {
+        setPhotos((prevPhotos) => [...prevPhotos, selectedUri]);
+      }
     }
   };
 
   //-------------CATEGORY and TAGS------------------
-  const handleTag = (tag: string) => {
+  const handleTag = (tagItem: string) => {
     setTag((prevTags) =>
-      prevTags.includes(tag)
-        ? prevTags.filter((t) => t !== tag)
-        : [...prevTags, tag]
+      prevTags.includes(tagItem)
+        ? prevTags.filter((t) => t !== tagItem)
+        : [...prevTags, tagItem]
     );
   };
 
-  const handleCategory = (category: string) => {
+  const handleCategory = (categoryItem: string) => {
     setCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((c) => c !== category)
-        : [...prevCategories, category]
+      prevCategories.includes(categoryItem)
+        ? prevCategories.filter((c) => c !== categoryItem)
+        : [...prevCategories, categoryItem]
     );
   };
 
   const handleSaveRecipe = async () => {
     if (title === "") {
-      alert("The title cannot be left empty!");
+      Alert.alert("Validation Error", "The title cannot be left empty!");
       return;
     }
     const filteredIngredients = ingredient.filter(
       (ing) => ing.name.trim() !== ""
     );
     if (filteredIngredients.length === 0) {
-      alert("Please enter an ingredient name.");
+      Alert.alert(
+        "Validation Error",
+        "Please enter at least one ingredient name."
+      );
       return;
     }
 
@@ -254,7 +306,10 @@ export default function AddRecipeScreen() {
       (ins) => ins.step.trim() !== ""
     );
     if (filteredInstructions.length === 0) {
-      alert("Please enter the instructions.");
+      Alert.alert(
+        "Validation Error",
+        "Please enter at least one instruction step."
+      );
       return;
     }
 
@@ -282,13 +337,13 @@ export default function AddRecipeScreen() {
           updatedAt: new Date().toISOString(),
         };
         await updateRecipes(updatedRecipe);
-        alert("Recipe updated successfully.");
+        Alert.alert("Success", "Recipe updated successfully.");
       } else {
         const newRecipe = await addRecipes(commonRecipeData);
-        alert("Recipe saved successfully.");
-        newRecipe.title;
+        Alert.alert("Success", "Recipe saved successfully.");
       }
 
+      // Başarılı kayıttan sonra state'leri sıfırla
       setTitle("");
       setDescription("");
       setPrepTime(undefined);
@@ -299,9 +354,17 @@ export default function AddRecipeScreen() {
       setPhotos([]);
       setCategories([]);
       setTag([]);
+      setNewInstructionStep("");
+      setCurrentInstructionPhoto(null);
+      setCurrentInstructionTimer("");
+
       navigation.goBack();
     } catch (error) {
-      alert("An error occurred while saving/updating the recipe.");
+      console.error("Error saving/updating recipe:", error);
+      Alert.alert(
+        "Error",
+        "An error occurred while saving/updating the recipe."
+      );
     }
   };
 
@@ -336,10 +399,10 @@ export default function AddRecipeScreen() {
             return {
               id: inst.id || uuidv4(),
               step: inst.step || "",
-              photoUri: inst.photoUri,
-              timerDuration: inst.timerDuration,
+              photoUri: inst.photoUri || undefined,
+              timerDuration: inst.timerDuration || undefined,
             };
-          }) || [{ id: uuidv4(), step: "" }]
+          }) || []
         );
         setCategories(recipeToEdit.categories || []);
         setTag(recipeToEdit.tags || []);
@@ -350,10 +413,14 @@ export default function AddRecipeScreen() {
         setPrepTime(undefined);
         setCookTime(undefined);
         setServings(undefined);
-        setIngredient([{ id: uuidv4(), name: "", quantity: "", unit: "" }]);
-        setInstruction([{ id: uuidv4(), step: "" }]);
+        setIngredient([]);
+        setInstruction([]);
         setCategories([]);
         setTag([]);
+        setPhotos([]);
+        setNewInstructionStep("");
+        setCurrentInstructionPhoto(null);
+        setCurrentInstructionTimer("");
       }
     }, [recipeToEdit])
   );
@@ -368,41 +435,54 @@ export default function AddRecipeScreen() {
           value={title}
           onChangeText={setTitle}
           style={AddRecipeScreenStyles.input}
+          mode="outlined"
         />
         <TextInput
           placeholder="Description"
           value={description}
           onChangeText={setDescription}
           style={AddRecipeScreenStyles.input}
+          mode="outlined"
+          multiline
+          numberOfLines={3}
         />
         <TextInput
           placeholder="Prepare Time (min)"
           value={prepTime !== undefined ? String(prepTime) : ""}
           onChangeText={handlePrepTime}
           style={AddRecipeScreenStyles.input}
+          keyboardType="numeric"
+          mode="outlined"
         />
         <TextInput
           placeholder="Cook Time (min)"
           value={cookTime !== undefined ? String(cookTime) : ""}
           onChangeText={handleCookTime}
           style={AddRecipeScreenStyles.input}
+          keyboardType="numeric"
+          mode="outlined"
         />
         <TextInput
           placeholder="Servings (person)"
           value={servings !== undefined ? String(servings) : ""}
           onChangeText={handleServings}
           style={AddRecipeScreenStyles.input}
+          keyboardType="numeric"
+          mode="outlined"
         />
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
           Ingredients
         </Text>
-        {ingredient.map((ingredient) => (
-          <View key={ingredient.id} style={AddRecipeScreenStyles.rowContainer}>
+        {ingredient.map((ingredientItem) => (
+          <View
+            key={ingredientItem.id}
+            style={AddRecipeScreenStyles.rowContainer}
+          >
             <TextInput
               label="Amount"
-              value={ingredient.quantity}
+              value={ingredientItem.quantity}
               onChangeText={(text) =>
-                handleIngredientChange(ingredient.id, "quantity", text)
+                handleIngredientChange(ingredientItem.id, "quantity", text)
               }
               mode="outlined"
               style={AddRecipeScreenStyles.ingredientInput}
@@ -410,26 +490,27 @@ export default function AddRecipeScreen() {
             />
             <TextInput
               label="Unit (g, pcs, cup)"
-              value={ingredient.unit}
+              value={ingredientItem.unit}
               onChangeText={(text) =>
-                handleIngredientChange(ingredient.id, "unit", text)
+                handleIngredientChange(ingredientItem.id, "unit", text)
               }
               mode="outlined"
               style={AddRecipeScreenStyles.ingredientInput}
             />
             <TextInput
               label="Ingredient Name"
-              value={ingredient.name}
+              value={ingredientItem.name}
               onChangeText={(text) =>
-                handleIngredientChange(ingredient.id, "name", text)
+                handleIngredientChange(ingredientItem.id, "name", text)
               }
               mode="outlined"
               style={AddRecipeScreenStyles.ingredientInput}
             />
             <IconButton
               icon="close-circle"
-              size={24}
-              onPress={() => handleRemoveIngredient(ingredient.id)}
+              iconColor="red"
+              size={28}
+              onPress={() => handleRemoveIngredient(ingredientItem.id)}
               accessibilityLabel="Delete Ingredient"
             />
           </View>
@@ -438,65 +519,188 @@ export default function AddRecipeScreen() {
           mode="outlined"
           onPress={handleAddIngredient}
           style={AddRecipeScreenStyles.addButton}
+          icon="plus-circle"
         >
-          + Add Ingredient
+          Add Ingredient
         </Button>
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
           Instructions
         </Text>
-        {instruction.map((instruction, index) => (
-          <View key={instruction.id} style={AddRecipeScreenStyles.rowContainer}>
-            <TextInput
-              label={`Step ${index + 1}`}
-              value={instruction.step}
-              onChangeText={(text) =>
-                handleInstructionChange(instruction.id, text)
-              }
-              mode="outlined"
-              style={AddRecipeScreenStyles.instructionInput}
-              multiline
-              numberOfLines={4}
-            />
-            <IconButton
-              icon="close-circle"
-              size={24}
-              onPress={() => handleRemoveInstruction(instruction.id)}
-              accessibilityLabel="Delete Instruction Step"
-            />
-          </View>
-        ))}
-        <Button
+
+        <TextInput
+          style={AddRecipeScreenStyles.textArea}
+          placeholder="Enter new instruction step"
+          multiline
+          numberOfLines={3}
+          value={newInstructionStep}
+          onChangeText={setNewInstructionStep}
           mode="outlined"
+        />
+
+        <View style={AddRecipeScreenStyles.instructionAddRow}>
+          <TextInput
+            style={[
+              AddRecipeScreenStyles.input,
+              AddRecipeScreenStyles.halfWidthInput,
+            ]}
+            placeholder="Timer (minutes)"
+            keyboardType="numeric"
+            value={currentInstructionTimer}
+            onChangeText={setCurrentInstructionTimer}
+            mode="outlined"
+          />
+          {currentInstructionPhoto ? (
+            <View style={AddRecipeScreenStyles.currentInstructionPhotoPreview}>
+              <Image
+                source={{ uri: currentInstructionPhoto }}
+                style={AddRecipeScreenStyles.instructionImagePreviewSmall}
+              />
+              <IconButton
+                icon="close-circle"
+                iconColor="red"
+                size={25}
+                style={AddRecipeScreenStyles.removePhotoIconSmall}
+                onPress={() => setCurrentInstructionPhoto(null)}
+              />
+            </View>
+          ) : (
+            <Button
+              mode="outlined"
+              onPress={() => pickImage(true, undefined)}
+              icon="camera"
+              style={[
+                AddRecipeScreenStyles.addButton,
+                AddRecipeScreenStyles.halfWidthButton,
+              ]}
+            >
+              Add Photo
+            </Button>
+          )}
+        </View>
+
+        <Button
+          mode="contained"
           onPress={handleAddInstruction}
           style={AddRecipeScreenStyles.addButton}
+          icon="plus-circle"
         >
-          + Add Step
+          Add Step
         </Button>
+
+        {instruction.map((ins, index) => (
+          <View key={ins.id} style={AddRecipeScreenStyles.instructionItem}>
+            <View style={AddRecipeScreenStyles.instructionContent}>
+              <Text style={AddRecipeScreenStyles.instructionNumber}>
+                {index + 1}.
+              </Text>
+              <TextInput
+                style={AddRecipeScreenStyles.instructionTextInput}
+                value={ins.step}
+                onChangeText={(text) =>
+                  handleInstructionChange(ins.id, "step", text)
+                }
+                multiline
+                numberOfLines={2}
+                mode="outlined"
+              />
+
+              <View style={AddRecipeScreenStyles.instructionExtraFields}>
+                <TextInput
+                  style={[
+                    AddRecipeScreenStyles.input,
+                    AddRecipeScreenStyles.quarterWidthInput,
+                  ]}
+                  placeholder="Min"
+                  keyboardType="numeric"
+                  value={ins.timerDuration?.toString() || ""}
+                  onChangeText={(text) =>
+                    handleInstructionChange(
+                      ins.id,
+                      "timerDuration",
+                      parseFloat(text) || undefined
+                    )
+                  }
+                  mode="outlined"
+                />
+                {ins.photoUri ? (
+                  <View style={AddRecipeScreenStyles.instructionImageDisplay}>
+                    <Image
+                      source={{ uri: ins.photoUri }}
+                      style={AddRecipeScreenStyles.instructionImagePreviewSmall}
+                    />
+                    <IconButton
+                      icon="close-circle"
+                      iconColor="red"
+                      size={20}
+                      style={AddRecipeScreenStyles.removePhotoIconSmall}
+                      onPress={() =>
+                        handleInstructionChange(ins.id, "photoUri", undefined)
+                      }
+                    />
+                  </View>
+                ) : (
+                  <Button
+                    mode="outlined"
+                    onPress={() => pickImage(true, ins.id)}
+                    icon="camera"
+                    style={[
+                      AddRecipeScreenStyles.instructionPhotoButton,
+                      AddRecipeScreenStyles.quarterWidthButton,
+                    ]}
+                  >
+                    Photo
+                  </Button>
+                )}
+              </View>
+            </View>
+
+            <View style={AddRecipeScreenStyles.instructionActions}>
+              <IconButton
+                icon="delete"
+                iconColor="red"
+                size={25}
+                onPress={() => handleRemoveInstruction(ins.id)}
+              />
+            </View>
+          </View>
+        ))}
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
           Photos
         </Text>
-        <Button
-          mode="outlined"
-          onPress={pickImage}
-          style={AddRecipeScreenStyles.addButton}
-          labelStyle={{ color: "red" }}
-          icon="image-plus"
-        >
-          Select Photo
-        </Button>
         {photos.length > 0 && (
           <View style={AddRecipeScreenStyles.photoPreviewContainer}>
             {photos.map((uri, index) => (
-              <Image
+              <View
                 key={index}
-                source={{ uri }}
-                style={AddRecipeScreenStyles.photoPreview}
-              />
+                style={AddRecipeScreenStyles.singlePhotoPreviewWrapper}
+              >
+                <Image
+                  source={{ uri }}
+                  style={AddRecipeScreenStyles.photoPreview}
+                />
+                <IconButton
+                  icon="close-circle"
+                  iconColor="red"
+                  size={24}
+                  style={AddRecipeScreenStyles.removeSingleImageIcon}
+                  onPress={() =>
+                    setPhotos((prev) => prev.filter((_, i) => i !== index))
+                  }
+                />
+              </View>
             ))}
           </View>
         )}
+        <Button
+          mode="outlined"
+          onPress={() => pickImage(false)}
+          style={AddRecipeScreenStyles.addButton}
+          icon="image-plus"
+        >
+          Add Recipe Photo
+        </Button>
 
         <Text variant="titleMedium" style={AddRecipeScreenStyles.sectionTitle}>
           Categories

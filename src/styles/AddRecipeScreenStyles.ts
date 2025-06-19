@@ -1,206 +1,224 @@
-import { StyleSheet, Dimensions, Platform } from "react-native";
-
-const { width } = Dimensions.get("window");
-
-const Colors = {
-  primary: "#FF6347",
-  accent: "#FFD700",
-  background: "#F8F8F8",
-  cardBackground: "#FFFFFF",
-  text: "#333333",
-  lightText: "#666666",
-  white: "#FFFFFF",
-  black: "#000000",
-  darkGray: "#444444",
-  mediumGray: "#BBBBBB",
-  lightGray: "#EEEEEE",
-  error: "#DC3545",
-  success: "#28A745",
-};
-
-const Typography = {
-  fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
-  fontSize: {
-    xSmall: 10,
-    small: 12,
-    medium: 16,
-    large: 20,
-    xLarge: 24,
-    xxLarge: 32,
-    xxxLarge: 40,
-  },
-  fontWeight: {
-    light: "300",
-    regular: "400",
-    medium: "500",
-    bold: "700",
-    extraBold: "900",
-  },
-} as const;
-
-const Spacing = {
-  xSmall: 4,
-  small: 8,
-  medium: 16,
-  large: 24,
-  xLarge: 32,
-  xxLarge: 40,
-};
-
-const Shadows = {
-  default: {
-    shadowColor: Colors.darkGray,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 6,
-  },
-  small: {
-    shadowColor: Colors.darkGray,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-};
+import { StyleSheet } from "react-native";
 
 export const AddRecipeScreenStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: "#F4F4F4",
+    padding: 16,
   },
   scrollViewContent: {
-    padding: Spacing.medium,
-    paddingBottom: Spacing.xxLarge,
+    paddingBottom: 120,
   },
+
   input: {
-    backgroundColor: Colors.cardBackground,
-    marginBottom: Spacing.medium,
-    fontFamily: Typography.fontFamily,
-    fontSize: Typography.fontSize.medium,
-    color: Colors.text,
-    borderRadius: Spacing.xSmall,
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: "#CCC",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    textAlign: "center",
   },
+
+  textArea: {
+    marginBottom: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: "#CCC",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    textAlignVertical: "top",
+    textAlign: "center",
+  },
+
   sectionTitle: {
-    fontSize: Typography.fontSize.large + 2,
-    fontWeight: Typography.fontWeight.bold,
-    color: Colors.text,
-    fontFamily: Typography.fontFamily,
-    marginTop: Spacing.large,
-    marginBottom: Spacing.small,
-    paddingBottom: Spacing.xSmall,
-    borderBottomWidth: 1.5,
-    borderBottomColor: Colors.lightGray,
+    marginTop: 24,
+    marginBottom: 8,
+    fontSize: 18,
+    fontWeight: "bold",
+    borderBottomWidth: 1,
+    borderBottomColor: "#BBB",
+    paddingBottom: 6,
+    color: "#333",
   },
+
   rowContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: Spacing.small,
+    gap: 8,
+    marginBottom: 12,
   },
+
   ingredientInput: {
     flex: 1,
-    marginRight: Spacing.xSmall,
-    backgroundColor: Colors.cardBackground,
-    fontFamily: Typography.fontFamily,
-    fontSize: Typography.fontSize.small,
-    borderRadius: Spacing.xSmall,
-  },
-  instructionInput: {
-    flex: 1,
-    marginRight: Spacing.xSmall,
-    backgroundColor: Colors.cardBackground,
-    minHeight: 120,
-    textAlignVertical: "top",
-    fontFamily: Typography.fontFamily,
-    fontSize: Typography.fontSize.medium,
-    borderRadius: Spacing.xSmall,
-  },
-  iconButton: {
-    margin: 0,
-    padding: Spacing.xSmall,
-  },
-  addButton: {
-    marginTop: Spacing.small,
-    marginBottom: Spacing.medium,
-    borderRadius: Spacing.small,
+    backgroundColor: "#FFFFFF",
     borderWidth: 1,
-    borderColor: Colors.primary,
-    backgroundColor: Colors.white,
-    ...Shadows.small,
-    height: Spacing.xxLarge,
-    justifyContent: "center",
+    borderColor: "#CCC",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    textAlign: "center",
   },
+
+  addButton: {
+    marginVertical: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#4CAF50",
+  },
+
+  instructionAddRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    marginBottom: 12,
+  },
+
+  halfWidthInput: {
+    flex: 1,
+  },
+
+  halfWidthButton: {
+    flex: 1,
+    borderRadius: 8,
+  },
+
+  currentInstructionPhotoPreview: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginLeft: 8,
+  },
+
+  instructionImagePreviewSmall: {
+    width: 50,
+    height: 50,
+    borderRadius: 6,
+  },
+
+  removePhotoIconSmall: {
+    margin: 0,
+  },
+
+  instructionItem: {
+    marginBottom: 16,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: "#CCC",
+  },
+
+  instructionContent: {
+    flexDirection: "column",
+  },
+
+  instructionNumber: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 6,
+    color: "#444",
+  },
+
+  instructionTextInput: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "#CCC",
+    marginBottom: 8,
+    paddingHorizontal: 10,
+    textAlign: "center",
+  },
+
+  instructionExtraFields: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+
+  instructionPhotoButton: {
+    flex: 1,
+    borderRadius: 8,
+  },
+
+  quarterWidthInput: {
+    width: 80,
+    borderWidth: 1,
+    borderColor: "#CCC",
+    borderRadius: 8,
+    textAlign: "center",
+  },
+
+  quarterWidthButton: {
+    width: 80,
+    borderRadius: 8,
+  },
+
+  instructionImageDisplay: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+
+  instructionActions: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 8,
+  },
+
   photoPreviewContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginTop: Spacing.medium,
-    marginBottom: Spacing.medium,
-    justifyContent: "flex-start",
+    gap: 10,
+    marginBottom: 12,
   },
-  photoPreviewWrapper: {
-    margin: Spacing.xSmall,
+
+  singlePhotoPreviewWrapper: {
     position: "relative",
-    ...Shadows.small,
-    borderRadius: Spacing.small,
   },
+
   photoPreview: {
-    width: (width - Spacing.medium * 2 - Spacing.xSmall * 4) / 3,
-    height: (width - Spacing.medium * 2 - Spacing.xSmall * 4) / 3,
-    borderRadius: Spacing.small,
-    resizeMode: "cover",
+    width: 100,
+    height: 100,
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: Colors.lightGray,
+    borderColor: "#CCC",
   },
-  removePhotoIcon: {
+
+  removeSingleImageIcon: {
     position: "absolute",
-    top: -5,
-    right: -5,
-    backgroundColor: Colors.error,
-    borderRadius: 15,
-    zIndex: 1,
-    borderWidth: 2,
-    borderColor: Colors.white,
+    top: -10,
+    right: -10,
+    backgroundColor: "#fff",
+    borderRadius: 12,
   },
+
   chipContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginBottom: Spacing.medium,
-    marginTop: Spacing.xSmall,
+    gap: 8,
+    marginBottom: 16,
   },
+
   chip: {
-    marginRight: Spacing.xSmall,
-    marginBottom: Spacing.xSmall,
-    backgroundColor: Colors.lightGray,
-    borderColor: Colors.mediumGray,
-    borderRadius: Spacing.large,
-    paddingHorizontal: Spacing.xSmall,
-    ...Shadows.small,
+    borderColor: "#aaa",
+    borderWidth: 1,
+    borderRadius: 20,
   },
+
   selectedChip: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
-    ...Shadows.default,
+    backgroundColor: "#4CAF50",
+    borderColor: "#4CAF50",
   },
-  chipText: {
-    color: Colors.darkGray,
-    fontFamily: Typography.fontFamily,
-    fontSize: Typography.fontSize.small,
-  },
+
   selectedChipText: {
-    color: Colors.white,
-    fontWeight: Typography.fontWeight.bold,
+    color: "#fff",
   },
+
   saveButton: {
-    marginTop: Spacing.large,
-    marginBottom: Spacing.medium,
-    backgroundColor: Colors.primary,
-    borderRadius: Spacing.xxLarge,
-    height: Spacing.xxLarge + Spacing.small,
-    justifyContent: "center",
-    alignItems: "center",
-    ...Shadows.default,
+    marginVertical: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
   },
 });
