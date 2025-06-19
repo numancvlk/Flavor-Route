@@ -15,16 +15,26 @@ const RootStack = createStackNavigator<RootParamList>();
 export default function App() {
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
-        <RootStack.Screen name="BottomTabs" component={AppNavigator} />
-        <RootStack.Screen name="AddRecipeScreen" component={AddRecipeScreen} />
+      <RootStack.Navigator>
+        <RootStack.Screen
+          name="BottomTabs"
+          component={AppNavigator}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="AddRecipeScreen"
+          component={AddRecipeScreen}
+          options={{ title: "Add New Recipes" }}
+        />
         <RootStack.Screen
           name="RecipeDetailScreen"
           component={RecipeDetailScreen}
+          options={{ headerShown: false }}
         />
         <RootStack.Screen
           name="CookingModeScreen"
           component={CookingModeScreen}
+          options={{ headerShown: false }}
         />
       </RootStack.Navigator>
     </NavigationContainer>

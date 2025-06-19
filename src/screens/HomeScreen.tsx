@@ -112,7 +112,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View>
+    <View style={HomeScreenStyles.mainContainer}>
       <ScrollView
         contentContainerStyle={HomeScreenStyles.scrollViewContent}
         refreshControl={

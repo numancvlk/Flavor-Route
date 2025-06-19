@@ -148,7 +148,7 @@ export const HomeScreenStyles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    margin: Spacing.large,
+    margin: 16,
     right: 0,
     bottom: 0,
     backgroundColor: Colors.primary,

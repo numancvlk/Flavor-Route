@@ -207,7 +207,7 @@ export default function AddRecipeScreen() {
     }
     const timerVal = parseFloat(currentInstructionTimer);
     if (!isNaN(timerVal) && timerVal > 0) {
-      newInstruction.timerDuration = timerVal;
+      newInstruction.timerDuration = timerVal * 60;
     }
 
     setInstruction((prevInstructions) => [...prevInstructions, newInstruction]);
@@ -251,7 +251,7 @@ export default function AddRecipeScreen() {
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: "images",
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
@@ -264,7 +264,7 @@ export default function AddRecipeScreen() {
       } else if (isInstructionPhoto && !instructionId) {
         setCurrentInstructionPhoto(selectedUri);
       } else {
-        setPhotos((prevPhotos) => [...prevPhotos, selectedUri]);
+        setPhotos([selectedUri]);
       }
     }
   };
@@ -544,7 +544,7 @@ export default function AddRecipeScreen() {
               AddRecipeScreenStyles.input,
               AddRecipeScreenStyles.halfWidthInput,
             ]}
-            placeholder="Timer (minutes)"
+            placeholder="Timer (min)"
             keyboardType="numeric"
             value={currentInstructionTimer}
             onChangeText={setCurrentInstructionTimer}
@@ -574,7 +574,7 @@ export default function AddRecipeScreen() {
                 AddRecipeScreenStyles.halfWidthButton,
               ]}
             >
-              Add Photo
+              Add Instruction Photo
             </Button>
           )}
         </View>

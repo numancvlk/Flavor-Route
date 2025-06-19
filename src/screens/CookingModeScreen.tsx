@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, ScrollView, Image, Alert, Platform } from "react-native";
+import { View, ScrollView, Image, Alert } from "react-native";
 import {
   Text,
   Button,
@@ -12,6 +12,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootParamList } from "../types/navigation";
 
 import { CookingModeScreenStyles } from "../styles/CookingModeScreenStyles";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type CookingModeScreenRouteProp = RouteProp<RootParamList, "CookingModeScreen">;
 type CookingModeScreenNavigationProp = StackNavigationProp<
@@ -32,7 +33,6 @@ export default function CookingModeScreen() {
   const currentInstruction = recipe.instructions[currentStepIndex];
   const totalSteps = recipe.instructions.length;
 
-  // Zamanlayıcıyı başlatma/durdurma
   const toggleTimer = useCallback(() => {
     if (timerRunning) {
       if (intervalRef.current) {
@@ -118,96 +118,98 @@ export default function CookingModeScreen() {
 
   return (
     <View style={CookingModeScreenStyles.container}>
-      <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content
-          title={recipe.title}
-          subtitle={`Step ${currentStepIndex + 1} of ${totalSteps}`}
-        />
-      </Appbar.Header>
-
-      <ProgressBar
-        progress={progress}
-        color={MD2Colors.red500}
-        style={CookingModeScreenStyles.progressBar}
-      />
-
-      <ScrollView contentContainerStyle={CookingModeScreenStyles.content}>
-        <Text variant="titleLarge" style={CookingModeScreenStyles.stepTitle}>
-          Step {currentStepIndex + 1}
-        </Text>
-        <Text
-          variant="bodyLarge"
-          style={CookingModeScreenStyles.instructionText}
-        >
-          {currentInstruction.step}
-        </Text>
-
-        {currentInstruction.photoUri && (
-          <Image
-            source={{ uri: currentInstruction.photoUri }}
-            style={CookingModeScreenStyles.instructionImage}
+      <SafeAreaView>
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+          <Appbar.Content
+            title={recipe.title}
+            subtitle={`Step ${currentStepIndex + 1} of ${totalSteps}`}
           />
-        )}
+        </Appbar.Header>
 
-        {/* Zamanlayıcı Gösterimi */}
-        {currentInstruction.timerDuration !== undefined &&
-          currentInstruction.timerDuration > 0 && (
-            <View style={CookingModeScreenStyles.timerContainer}>
-              <Text
-                variant="headlineSmall"
-                style={CookingModeScreenStyles.timerText}
-              >
-                {formatTime(timeLeft)}
-              </Text>
-              <Button
-                mode="contained"
-                onPress={toggleTimer}
-                icon={timerRunning ? "pause" : "play"}
-                style={CookingModeScreenStyles.timerButton}
-              >
-                {timerRunning
-                  ? "Pause Timer"
-                  : timeLeft === 0
-                  ? "Restart Timer"
-                  : "Start Timer"}
-              </Button>
-              <Button
-                mode="outlined"
-                onPress={() => {
-                  if (intervalRef.current) clearInterval(intervalRef.current);
-                  setTimerRunning(false);
-                  setTimeLeft((currentInstruction.timerDuration || 0) * 60);
-                }}
-                icon="refresh"
-                style={CookingModeScreenStyles.resetButton}
-              >
-                Reset
-              </Button>
-            </View>
+        <ProgressBar
+          progress={progress}
+          color={MD2Colors.red500}
+          style={CookingModeScreenStyles.progressBar}
+        />
+
+        <ScrollView contentContainerStyle={CookingModeScreenStyles.content}>
+          <Text variant="titleLarge" style={CookingModeScreenStyles.stepTitle}>
+            Step {currentStepIndex + 1}
+          </Text>
+          <Text
+            variant="bodyLarge"
+            style={CookingModeScreenStyles.instructionText}
+          >
+            {currentInstruction.step}
+          </Text>
+
+          {currentInstruction.photoUri && (
+            <Image
+              source={{ uri: currentInstruction.photoUri }}
+              style={CookingModeScreenStyles.instructionImage}
+            />
           )}
-      </ScrollView>
 
-      <View style={CookingModeScreenStyles.navigationButtons}>
-        <Button
-          mode="contained"
-          onPress={handlePrev}
-          disabled={currentStepIndex === 0}
-          icon="arrow-left"
-          style={CookingModeScreenStyles.navButton}
-        >
-          Previous
-        </Button>
-        <Button
-          mode="contained"
-          onPress={handleNext}
-          icon="arrow-right"
-          contentStyle={{ flexDirection: "row-reverse" }}
-          style={CookingModeScreenStyles.navButton}
-        >
-          {currentStepIndex === totalSteps - 1 ? "Finish" : "Next"}
-        </Button>
-      </View>
+          {/* Zamanlayıcı Gösterimi */}
+          {currentInstruction.timerDuration !== undefined &&
+            currentInstruction.timerDuration > 0 && (
+              <View style={CookingModeScreenStyles.timerContainer}>
+                <Text
+                  variant="headlineSmall"
+                  style={CookingModeScreenStyles.timerText}
+                >
+                  {formatTime(timeLeft)}
+                </Text>
+                <Button
+                  mode="contained"
+                  onPress={toggleTimer}
+                  icon={timerRunning ? "pause" : "play"}
+                  style={CookingModeScreenStyles.timerButton}
+                >
+                  {timerRunning
+                    ? "Pause Timer"
+                    : timeLeft === 0
+                    ? "Restart Timer"
+                    : "Start Timer"}
+                </Button>
+                <Button
+                  mode="outlined"
+                  onPress={() => {
+                    if (intervalRef.current) clearInterval(intervalRef.current);
+                    setTimerRunning(false);
+                    setTimeLeft((currentInstruction.timerDuration || 0) * 60);
+                  }}
+                  icon="refresh"
+                  style={CookingModeScreenStyles.resetButton}
+                >
+                  Reset
+                </Button>
+              </View>
+            )}
+        </ScrollView>
+
+        <View style={CookingModeScreenStyles.navigationButtons}>
+          <Button
+            mode="contained"
+            onPress={handlePrev}
+            disabled={currentStepIndex === 0}
+            icon="arrow-left"
+            style={CookingModeScreenStyles.navButton}
+          >
+            Previous
+          </Button>
+          <Button
+            mode="contained"
+            onPress={handleNext}
+            icon="arrow-right"
+            contentStyle={{ flexDirection: "row-reverse" }}
+            style={CookingModeScreenStyles.navButton}
+          >
+            {currentStepIndex === totalSteps - 1 ? "Finish" : "Next"}
+          </Button>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }

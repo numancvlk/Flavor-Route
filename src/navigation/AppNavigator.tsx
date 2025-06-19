@@ -58,7 +58,6 @@ export default function AppNavigator() {
   return (
     <TAB.Navigator
       screenOptions={{
-        headerShown: false,
         tabBarActiveTintColor: "#FF6346",
         tabBarInactiveTintColor: "#999999",
         tabBarStyle: {
@@ -75,7 +74,7 @@ export default function AppNavigator() {
         name="HomeScreen"
         component={HomeStackScreen}
         options={{
-          title: "Recipes",
+          title: "All Recipes",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
               name="food-fork-drink"
