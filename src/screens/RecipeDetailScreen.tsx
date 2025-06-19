@@ -133,7 +133,7 @@ export default function RecipeDetailScreen() {
 
   const handleStartCooking = () => {
     if (recipe && recipe.instructions && recipe.instructions.length > 0) {
-      navigation.navigate("CookingModeScreen", { recipeId: recipe.id });
+      navigation.navigate("CookingModeScreen", { recipe: recipe });
     } else {
       Alert.alert(
         "Error",

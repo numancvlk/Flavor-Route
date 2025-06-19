@@ -6,7 +6,7 @@ const RECIPES_KEY = "MYRECIPES";
 export const getRecipes = async (): Promise<Recipe[]> => {
   try {
     const jsonValue = await AsyncStorage.getItem(RECIPES_KEY);
-    return jsonValue != null ? JSON.parse(jsonValue) : [];
+    return jsonValue != null ? (JSON.parse(jsonValue) as Recipe[]) : [];
   } catch (error) {
     console.log("GetRecipes Hata");
 

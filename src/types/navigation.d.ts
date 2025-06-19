@@ -22,7 +22,7 @@ export type RootParamList = {
 
   AddRecipeScreen: { recipeToEdit?: Recipe } | undefined;
   RecipeDetailScreen: { recipeId: string };
-  CookingModeScreen: { recipeId: string };
+  CookingModeScreen: { recipe: Recipe };
 };
 
 export type BottomTabParamList = {
