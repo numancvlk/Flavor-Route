@@ -100,11 +100,6 @@ export default function AddRecipeScreen() {
   const navigation = useNavigation<AddRecipeScreenNavigationProp>();
   const recipeToEdit = route.params?.recipeToEdit;
 
-  console.log(recipeToEdit);
-  console.log(
-    "AddRecipeScreen: route.params?.recipeToEdit (alınan) değeri:",
-    JSON.stringify(recipeToEdit, null, 2)
-  );
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [prepTime, setPrepTime] = useState<string>();
@@ -282,17 +277,10 @@ export default function AddRecipeScreen() {
         };
         await updateRecipes(updatedRecipe);
         alert("Recipe updated successfully.");
-        console.log(
-          "Tarif başarıyla güncellendi (AddRecipeScreen):",
-          updatedRecipe.title
-        );
       } else {
         const newRecipe = await addRecipes(commonRecipeData);
         alert("Recipe saved successfully.");
-        console.log(
-          "Yeni tarif başarıyla eklendi (AddRecipeScreen):",
-          newRecipe.title
-        );
+        newRecipe.title;
       }
 
       setTitle("");

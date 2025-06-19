@@ -1,53 +1,61 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { RootParamList } from "../types/navigation";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { createStackNavigator } from "@react-navigation/stack";
+import {
+  RootParamList,
+  HomeStackParamList,
+  FavoritesStackParamList,
+  MyRecipesStackParamList,
+  BottomTabParamList,
+} from "../types/navigation";
+
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 //--------------SCREENS-------------------
 import HomeScreen from "../screens/HomeScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import MyRecipesScreen from "../screens/MyRecipesScreen";
+const TAB = createBottomTabNavigator<BottomTabParamList>();
 
-const TAB = createBottomTabNavigator<RootParamList>();
-const STACK = createStackNavigator<RootParamList>(); // İç içe Stack'ler için
+function HomeStackScreen() {
+  const HomeStack = createStackNavigator<HomeStackParamList>();
+  return (
+    <HomeStack.Navigator initialRouteName="HomeInitial">
+      <HomeStack.Screen
+        name="HomeInitial"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+    </HomeStack.Navigator>
+  );
+}
+
+function FavoritesStackScreen() {
+  const FavoritesStack = createStackNavigator<FavoritesStackParamList>();
+  return (
+    <FavoritesStack.Navigator initialRouteName="FavoritesInitial">
+      <FavoritesStack.Screen
+        name="FavoritesInitial"
+        component={FavoritesScreen}
+        options={{ headerShown: false }}
+      />
+    </FavoritesStack.Navigator>
+  );
+}
+
+function MyRecipesStackScreen() {
+  const MyRecipesStack = createStackNavigator<MyRecipesStackParamList>();
+  return (
+    <MyRecipesStack.Navigator initialRouteName="MyRecipesInitial">
+      <MyRecipesStack.Screen
+        name="MyRecipesInitial"
+        component={MyRecipesScreen}
+        options={{ headerShown: false }}
+      />
+    </MyRecipesStack.Navigator>
+  );
+}
 
 export default function AppNavigator() {
-  function HomeStackScreen() {
-    return (
-      <STACK.Navigator initialRouteName="HomeScreen">
-        <STACK.Screen
-          name="HomeScreen"
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-      </STACK.Navigator>
-    );
-  }
-
-  function FavoritesStackScreen() {
-    return (
-      <STACK.Navigator initialRouteName="FavoritesScreen">
-        <STACK.Screen
-          name="FavoritesScreen"
-          component={FavoritesScreen}
-          options={{ headerShown: false }}
-        />
-      </STACK.Navigator>
-    );
-  }
-
-  function MyRecipesStackScreen() {
-    return (
-      <STACK.Navigator initialRouteName="MyRecipesScreen">
-        <STACK.Screen
-          name="MyRecipesScreen"
-          component={MyRecipesScreen}
-          options={{ headerShown: false }}
-        />
-      </STACK.Navigator>
-    );
-  }
-
   return (
     <TAB.Navigator
       screenOptions={{

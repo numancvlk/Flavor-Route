@@ -1,11 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { v4 as uuidv4 } from "uuid";
 import { Recipe } from "../types/Recipe";
-import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 
 const RECIPES_KEY = "MYRECIPES";
-const INITIALIZED_FLAG_KEY = "HAS_INITIALIZED_DEFAULT_RECIPES";
-
 export const getRecipes = async (): Promise<Recipe[]> => {
   try {
     const jsonValue = await AsyncStorage.getItem(RECIPES_KEY);
@@ -93,17 +90,5 @@ export const deleteRecipes = async (recipeId: string): Promise<void> => {
     await saveRecipes(remainingRecipes);
   } catch (error) {
     console.log("DeleteRecipes Hata");
-  }
-};
-
-export const initializeDefaultRecipes = async (): Promise<void> => {
-  try {
-    const existingRecipes = await getRecipes();
-
-    if (existingRecipes.length === 0) {
-      await saveRecipes(DEFAULT_RECIPES);
-    }
-  } catch (error) {
-    console.error("Varsayılan tarifler başlatılırken hata:", error);
   }
 };

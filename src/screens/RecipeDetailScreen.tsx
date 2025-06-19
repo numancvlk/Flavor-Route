@@ -19,7 +19,6 @@ import {
   updateRecipes,
   deleteRecipes,
 } from "../services/recipeServices";
-import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RecipeDetailScreenStyles } from "../styles/RecipeDetailScreenStyles";
 
@@ -45,7 +44,6 @@ const Colors = {
   success: "#28A745",
 };
 
-// Tipografi tanımları
 const Typography = {
   fontFamily: Platform.OS === "ios" ? "Avenir Next" : "Roboto",
   fontSize: {
@@ -91,26 +89,13 @@ export default function RecipeDetailScreen() {
   const loadRecipeDetails = useCallback(async () => {
     setLoading(true);
     try {
-      const loadedUserRecipes = await getRecipes();
+      const loadedRecipes = await getRecipes();
+      const foundRecipe = loadedRecipes.find((r) => r.id === recipeId);
 
-      const combinedRecipes = [...DEFAULT_RECIPES];
-
-      loadedUserRecipes.forEach((userRecipe) => {
-        const existingDefaultIndex = combinedRecipes.findIndex(
-          (defaultRecipe) => defaultRecipe.id === userRecipe.id
-        );
-        if (existingDefaultIndex > -1) {
-          combinedRecipes[existingDefaultIndex] = userRecipe;
-        } else {
-          combinedRecipes.push(userRecipe);
-        }
-      });
-
-      const foundRecipe = combinedRecipes.find((r) => r.id === recipeId);
       if (foundRecipe) {
         setRecipe(foundRecipe);
       } else {
-        Alert.alert("Hata", "Tarif bulunamadı.");
+        Alert.alert("Hata", "Tarif Bulunamadı");
         navigation.goBack();
       }
     } catch (error) {
@@ -193,7 +178,12 @@ export default function RecipeDetailScreen() {
             try {
               await deleteRecipes(recipe.id);
               Alert.alert("Tarif Silindi", "Tarif Başarıyla Silindi");
-              navigation.navigate("HomeScreen");
+              navigation.navigate("BottomTabs", {
+                screen: "HomeScreen",
+                params: {
+                  screen: "HomeInitial",
+                },
+              });
             } catch (error) {
               console.error("Tarif Silinmedi");
             }

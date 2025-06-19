@@ -1,13 +1,34 @@
 import { Recipe } from "./Recipe";
+import { NavigatorScreenParams } from "@react-navigation/native";
+
+export type HomeStackParamList = {
+  HomeInitial: undefined;
+};
+
+export type FavoritesStackParamList = {
+  FavoritesInitial: undefined;
+};
+
+export type MyRecipesStackParamList = {
+  MyRecipesInitial: undefined;
+};
 
 export type RootParamList = {
-  HomeScreen: undefined;
-  MyRecipesScreen: undefined;
-  FavoritesScreen: undefined;
+  BottomTabs: NavigatorScreenParams<BottomTabParamList>;
+
+  HomeScreen: NavigatorScreenParams<HomeStackParamList>;
+  FavoritesScreen: NavigatorScreenParams<FavoritesStackParamList>;
+  MyRecipesScreen: NavigatorScreenParams<MyRecipesStackParamList>;
+
   AddRecipeScreen: { recipeToEdit?: Recipe } | undefined;
   RecipeDetailScreen: { recipeId: string };
   CookingModeScreen: { recipeId: string };
-  BottomTabs: undefined;
+};
+
+export type BottomTabParamList = {
+  HomeScreen: NavigatorScreenParams<HomeStackParamList>;
+  FavoritesScreen: NavigatorScreenParams<FavoritesStackParamList>;
+  MyRecipesScreen: NavigatorScreenParams<MyRecipesStackParamList>;
 };
 
 declare global {

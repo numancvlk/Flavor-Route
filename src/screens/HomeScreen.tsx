@@ -15,7 +15,6 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 
 //-----------DAHİLİ-------------------
 import { RootParamList } from "../types/navigation";
-import { DEFAULT_RECIPES } from "../data/defaultRecipes";
 import { Recipe } from "../types/Recipe";
 import { getRecipes, updateRecipes } from "../services/recipeServices";
 import { HomeScreenStyles } from "../styles/HomeScreenStyles";
@@ -23,7 +22,6 @@ import { HomeScreenStyles } from "../styles/HomeScreenStyles";
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp<RootParamList>>();
 
-  const [userRecipes, setUserRecipes] = useState<Recipe[]>([]);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [refreshing, setRefreshing] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,25 +30,9 @@ export default function HomeScreen() {
     setRefreshing(true);
     try {
       const loadedUserRecipes = await getRecipes();
-      const combined = [...DEFAULT_RECIPES];
-
-      loadedUserRecipes.forEach((userRecipe) => {
-        const existingDefaultIndex = combined.findIndex(
-          (defaultRecipe) => defaultRecipe.id === userRecipe.id
-        );
-        if (existingDefaultIndex > -1) {
-          combined[existingDefaultIndex] = userRecipe;
-        } else {
-          combined.push(userRecipe);
-        }
-      });
-
-      setRecipes(combined);
-      setUserRecipes(loadedUserRecipes);
+      setRecipes(loadedUserRecipes);
     } catch (error) {
-      console.log("Recipe Upload Error");
       setRecipes([]);
-      setUserRecipes([]);
     } finally {
       setRefreshing(false);
     }
