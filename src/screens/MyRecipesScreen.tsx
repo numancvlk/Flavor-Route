@@ -29,7 +29,6 @@ export default function MyRecipesScreen() {
       setUserRecipes(filtered);
       setFilteredUserRecipes(filtered);
     } catch (error) {
-      console.error(error);
       Alert.alert("Error", "Failed to load your recipes.");
       setUserRecipes([]);
       setFilteredUserRecipes([]);

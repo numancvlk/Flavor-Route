@@ -78,14 +78,18 @@ export default function FavoritesScreen() {
         loadFavoriteRecipes();
       }
     } catch (error) {
-      console.error(error);
       Alert.alert("Error", "Failed to update favorite status.");
     }
+  };
+
+  const Colors = {
+    accent: "#FFD700",
+    white: "#FFFFFF",
   };
   return (
     <View style={FavoritesScreenStyles.mainContainer}>
       <Searchbar
-        placeholder="Favori tariflerde ara..."
+        placeholder="Search in favorite recipes..."
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={FavoritesScreenStyles.searchBar}
@@ -95,7 +99,7 @@ export default function FavoritesScreen() {
       {isLoading ? (
         <View style={FavoritesScreenStyles.loadingContainer}>
           <Text style={FavoritesScreenStyles.loadingText}>
-            Favoriler yükleniyor...
+            Loading favorites...
           </Text>
         </View>
       ) : (
@@ -115,7 +119,7 @@ export default function FavoritesScreen() {
                 ) : (
                   <View style={FavoritesScreenStyles.noImagePlaceholder}>
                     <Text style={FavoritesScreenStyles.noImageText}>
-                      Fotoğraf Yok
+                      No Image Available
                     </Text>
                   </View>
                 )}
@@ -124,8 +128,8 @@ export default function FavoritesScreen() {
                     onPress={() => handleToggleFavorite(recipe.id)}
                   >
                     <MaterialCommunityIcons
-                      name={"heart"}
-                      color={"red"}
+                      name={recipe.isFavorite ? "heart" : "heart-outline"}
+                      color={recipe.isFavorite ? Colors.accent : Colors.white}
                       size={24}
                     />
                   </TouchableOpacity>
@@ -142,21 +146,21 @@ export default function FavoritesScreen() {
                     {recipe.prepTime !== undefined && recipe.prepTime > 0 && (
                       <View style={FavoritesScreenStyles.timeItem}>
                         <Text style={FavoritesScreenStyles.timeText}>
-                          {recipe.prepTime} dk haz.
+                          {recipe.prepTime} min prep.
                         </Text>
                       </View>
                     )}
                     {recipe.cookTime !== undefined && recipe.cookTime > 0 && (
                       <View style={FavoritesScreenStyles.timeItem}>
                         <Text style={FavoritesScreenStyles.timeText}>
-                          {recipe.cookTime} dk piş.
+                          {recipe.cookTime} min cook.
                         </Text>
                       </View>
                     )}
                   </View>
                   {recipe.servings !== undefined && (
                     <Text style={FavoritesScreenStyles.servingsText}>
-                      {recipe.servings} kişilik
+                      {recipe.servings} servings
                     </Text>
                   )}
                 </Card.Content>
@@ -165,10 +169,10 @@ export default function FavoritesScreen() {
           ) : (
             <View style={FavoritesScreenStyles.noFavoritesContainer}>
               <Text style={FavoritesScreenStyles.noFavoritesText}>
-                Henüz favori tarifiniz yok!
+                You don't have any favorite recipes yet!
               </Text>
               <Text style={FavoritesScreenStyles.noFavoritesSubText}>
-                Tarifleri kalp ikonuna dokunarak buraya ekleyebilirsiniz.
+                You can add recipes here by tapping the heart icon.
               </Text>
             </View>
           )}

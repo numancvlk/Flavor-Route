@@ -1,5 +1,5 @@
-import { View, ScrollView, Image } from "react-native";
-import { useCallback, useEffect, useState } from "react";
+import { View, ScrollView, Image, Alert } from "react-native";
+import { useCallback, useState } from "react";
 import { TextInput, Button, Text, IconButton, Chip } from "react-native-paper";
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -111,17 +111,23 @@ export default function AddRecipeScreen() {
   const [categories, setCategories] = useState<string[]>([]);
   const [tag, setTag] = useState<string[]>([]);
 
-  const handlePrepTime = (text: string) => {
-    setPrepTime(text);
+  const handleNumericInput = (
+    text: string,
+    setState: React.Dispatch<React.SetStateAction<string | undefined>>
+  ) => {
+    if (text === "" || /^\d*\.?\d*$/.test(text)) {
+      setState(text);
+    } else {
+      Alert.alert("Error", "Please enter numbers only.");
+    }
   };
+  const handlePrepTime = (text: string) =>
+    handleNumericInput(text, setPrepTime);
+  const handleCookTime = (text: string) =>
+    handleNumericInput(text, setCookTime);
+  const handleServings = (text: string) =>
+    handleNumericInput(text, setServings);
 
-  const handleCookTime = (text: string) => {
-    setCookTime(text);
-  };
-
-  const handleServings = (text: string) => {
-    setServings(text);
-  };
   //-------------INGREDIENTS ADD REMOVE---------------
   const handleAddIngredient = () => {
     setIngredient([
@@ -337,6 +343,7 @@ export default function AddRecipeScreen() {
         );
         setCategories(recipeToEdit.categories || []);
         setTag(recipeToEdit.tags || []);
+        setPhotos(recipeToEdit.photos || []);
       } else {
         setTitle("");
         setDescription("");
@@ -369,7 +376,7 @@ export default function AddRecipeScreen() {
           style={AddRecipeScreenStyles.input}
         />
         <TextInput
-          placeholder="Prepare Time"
+          placeholder="Prepare Time (min)"
           value={prepTime !== undefined ? String(prepTime) : ""}
           onChangeText={handlePrepTime}
           style={AddRecipeScreenStyles.input}
@@ -381,7 +388,7 @@ export default function AddRecipeScreen() {
           style={AddRecipeScreenStyles.input}
         />
         <TextInput
-          placeholder="Servings"
+          placeholder="Servings (person)"
           value={servings !== undefined ? String(servings) : ""}
           onChangeText={handleServings}
           style={AddRecipeScreenStyles.input}
@@ -543,7 +550,7 @@ export default function AddRecipeScreen() {
         <Button
           mode="contained"
           onPress={handleSaveRecipe}
-          style={AddRecipeScreenStyles.addButton}
+          style={AddRecipeScreenStyles.saveButton}
           icon="content-save"
         >
           Save Recipe

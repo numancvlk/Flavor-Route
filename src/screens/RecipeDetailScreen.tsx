@@ -95,11 +95,11 @@ export default function RecipeDetailScreen() {
       if (foundRecipe) {
         setRecipe(foundRecipe);
       } else {
-        Alert.alert("Hata", "Tarif Bulunamadı");
+        Alert.alert("Error", "Recipe Not Found");
         navigation.goBack();
       }
     } catch (error) {
-      Alert.alert("Hata", "Tarif detayları yüklenirken bir sorun oluştu.");
+      Alert.alert("Error", "There was a problem loading the recipe details.");
       navigation.goBack();
     } finally {
       setLoading(false);
@@ -127,7 +127,7 @@ export default function RecipeDetailScreen() {
       await updateRecipes(updatedRecipe);
       setRecipe(updatedRecipe);
     } catch (error) {
-      Alert.alert("Hata", "Favori durumu güncellenirken bir sorun oluştu.");
+      Alert.alert("Error", "There was a problem updating the favorite status.");
     }
   };
 
@@ -135,27 +135,32 @@ export default function RecipeDetailScreen() {
     if (recipe && recipe.instructions && recipe.instructions.length > 0) {
       navigation.navigate("CookingModeScreen", { recipeId: recipe.id });
     } else {
-      Alert.alert("Hata", "Bu tarifin yapılış adımları bulunmuyor.");
+      Alert.alert(
+        "Error",
+        "The steps for making this recipe are not available."
+      );
     }
   };
   if (loading) {
     return (
       <View style={RecipeDetailScreenStyles.loadingContainer}>
-        <Text style={Typography.body1}>Tarif yükleniyor...</Text>
+        <Text style={Typography.body1}>Loading recipe...</Text>
       </View>
     );
   }
   if (!recipe) {
     return (
       <View style={RecipeDetailScreenStyles.container}>
-        <Text style={Typography.body1}>Tarif bilgisi alınamadı.</Text>
+        <Text style={Typography.body1}>
+          Recipe information could not be retrieved.
+        </Text>
         <Button
           mode="contained"
           onPress={() => navigation.goBack()}
           style={{ marginTop: Spacing.medium }}
           theme={{ colors: { primary: Colors.primary } }}
         >
-          Geri Dön
+          Go Back
         </Button>
       </View>
     );
@@ -163,21 +168,21 @@ export default function RecipeDetailScreen() {
 
   const handleRecipeDelete = () => {
     if (!recipe) {
-      Alert.alert("Tarif Yok", "Silinecek Tarif Bulunamadı");
+      Alert.alert("No Recipe", "Recipe to be deleted not found.");
       return;
     }
 
     Alert.alert(
-      "Tarifi Sil",
-      `${recipe.title} tarifini silmek istiyor musunuz?`,
+      "Delete Recipe",
+      `${recipe.title} do you want to delete the recipe?`,
       [
-        { text: "İptal", style: "cancel" },
+        { text: "Cancel", style: "cancel" },
         {
-          text: "Sil",
+          text: "Delete",
           onPress: async () => {
             try {
               await deleteRecipes(recipe.id);
-              Alert.alert("Tarif Silindi", "Tarif Başarıyla Silindi");
+              Alert.alert("Recipe Deleted", "Recipe Successfully Deleted");
               navigation.navigate("BottomTabs", {
                 screen: "HomeScreen",
                 params: {
@@ -185,7 +190,7 @@ export default function RecipeDetailScreen() {
                 },
               });
             } catch (error) {
-              console.error("Tarif Silinmedi");
+              console.error("Recipe Not Deleted");
             }
           },
           style: "destructive",
@@ -199,7 +204,7 @@ export default function RecipeDetailScreen() {
     if (recipe) {
       navigation.navigate("AddRecipeScreen", { recipeToEdit: recipe });
     } else {
-      Alert.alert("Tarif Bulunamadı", "İlgili Tarif Bulunamadı");
+      Alert.alert("Recipe Not Found", "Related Recipe Not Found");
     }
   };
 
@@ -249,17 +254,17 @@ export default function RecipeDetailScreen() {
           <View style={RecipeDetailScreenStyles.infoRow}>
             {recipe.prepTime !== undefined && recipe.prepTime > 0 && (
               <Text style={RecipeDetailScreenStyles.infoText}>
-                Hazırlık: {recipe.prepTime} dk
+                Prep Time: {recipe.prepTime} min
               </Text>
             )}
             {recipe.cookTime !== undefined && recipe.cookTime > 0 && (
               <Text style={RecipeDetailScreenStyles.infoText}>
-                Pişirme: {recipe.cookTime} dk
+                Cook Time: {recipe.cookTime} min
               </Text>
             )}
             {recipe.servings !== undefined && recipe.servings > 0 && (
               <Text style={RecipeDetailScreenStyles.infoText}>
-                Kişilik: {recipe.servings}
+                Servings: {recipe.servings}
               </Text>
             )}
           </View>
@@ -268,7 +273,7 @@ export default function RecipeDetailScreen() {
         {recipe.ingredients && recipe.ingredients.length > 0 && (
           <List.Section style={RecipeDetailScreenStyles.section}>
             <List.Subheader style={RecipeDetailScreenStyles.sectionHeader}>
-              Malzemeler
+              Ingredients
             </List.Subheader>
             {recipe.ingredients.map((item, index) => (
               <List.Item
@@ -291,7 +296,7 @@ export default function RecipeDetailScreen() {
         {recipe.instructions && recipe.instructions.length > 0 && (
           <List.Section style={RecipeDetailScreenStyles.section}>
             <List.Subheader style={RecipeDetailScreenStyles.sectionHeader}>
-              Yapılışı
+              Instructions
             </List.Subheader>
             {recipe.instructions.map((item, index) => (
               <List.Item
@@ -312,7 +317,7 @@ export default function RecipeDetailScreen() {
         {recipe.categories && recipe.categories.length > 0 && (
           <View style={RecipeDetailScreenStyles.section}>
             <Text style={RecipeDetailScreenStyles.sectionHeader}>
-              Kategoriler:
+              Categories:
             </Text>
             <View style={RecipeDetailScreenStyles.chipContainer}>
               {recipe.categories.map((category, index) => (
@@ -333,9 +338,7 @@ export default function RecipeDetailScreen() {
 
         {recipe.tags && recipe.tags.length > 0 && (
           <View style={RecipeDetailScreenStyles.section}>
-            <Text style={RecipeDetailScreenStyles.sectionHeader}>
-              Etiketler:
-            </Text>
+            <Text style={RecipeDetailScreenStyles.sectionHeader}>Tags:</Text>
             <View style={RecipeDetailScreenStyles.chipContainer}>
               {recipe.tags.map((tag, index) => (
                 <Chip
@@ -355,12 +358,12 @@ export default function RecipeDetailScreen() {
 
         {recipe.createdAt && (
           <Text style={RecipeDetailScreenStyles.dateText}>
-            Eklenme: {new Date(recipe.createdAt).toLocaleDateString()}
+            Date Added: {new Date(recipe.createdAt).toLocaleDateString()}
           </Text>
         )}
         {recipe.updatedAt && (
           <Text style={RecipeDetailScreenStyles.dateText}>
-            Son Güncelleme: {new Date(recipe.updatedAt).toLocaleDateString()}
+            Last Updated: {new Date(recipe.updatedAt).toLocaleDateString()}
           </Text>
         )}
       </ScrollView>
@@ -376,7 +379,7 @@ export default function RecipeDetailScreen() {
             colors: { primary: Colors.primary, onPrimary: Colors.white },
           }}
         >
-          Tarifi Yap
+          Make Recipe
         </Button>
       )}
 
@@ -387,7 +390,7 @@ export default function RecipeDetailScreen() {
         labelStyle={RecipeDetailScreenStyles.deleteButtonLabel}
         theme={{ colors: { primary: Colors.error, onSurface: Colors.error } }}
       >
-        Tarifi Sil
+        Delete Recipe
       </Button>
 
       <Button
@@ -399,7 +402,7 @@ export default function RecipeDetailScreen() {
           colors: { primary: Colors.primary, onSurface: Colors.primary },
         }}
       >
-        Tarifi Düzenle
+        Edit Recipe
       </Button>
     </View>
   );
