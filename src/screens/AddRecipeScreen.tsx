@@ -207,7 +207,7 @@ export default function AddRecipeScreen() {
     }
     const timerVal = parseFloat(currentInstructionTimer);
     if (!isNaN(timerVal) && timerVal > 0) {
-      newInstruction.timerDuration = timerVal * 60;
+      newInstruction.timerDuration = timerVal;
     }
 
     setInstruction((prevInstructions) => [...prevInstructions, newInstruction]);
