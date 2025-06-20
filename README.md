@@ -35,7 +35,7 @@ Artık uygulamayı kullanmaya hazırsınız!
 ▶️ [Watch Project Video on YouTube](https://www.youtube.com/shorts/qtbGwN0GMmI)
 
 ⚠️ Önemli Notlar
-* Bu uygulama, verileri telefonunuzun veya emülatörünüzün **yerel depolamasında (`localStorage`)** saklar. Bu sayede, uygulamayı kapatsanız dahi harcamalarınız kaybolmaz ve kaldığınız yerden devam edebilirsiniz.
+* Bu uygulama, verileri telefonunuzun veya emülatörünüzün **yerel depolamasında (`localStorage`)** saklar. Bu sayede, uygulamayı kapatsanız dahi yemek tarifleriniz kaybolmaz ve kaldığınız yerden devam edebilirsiniz.
   
 ### Bu proje, sadece portföy amacıyla ve ticari bir amaç gütmeden paylaşılmaktadır.
 ### This project is shared solely for portfolio purposes and without any commercial intent.
