@@ -1,5 +1,5 @@
 # 🚀 REACT NATIVE - FLAVOR ROUTE 🚀
-Bu proje, kullanıcıların kolay bir şekilde yemek tariflerini defterler yerine kendi telefonunda güvenli bir şekilde saklaması için tasarlanmıştır. TypeScript ve React Native kullanarak sıfırdan geliştirdim.
+Bu proje, kullanıcıların kolay bir şekilde yemek tariflerini defterler yerine kendi telefonunda saklaması için tasarlanmıştır. TypeScript ve React Native kullanarak sıfırdan geliştirdim.
 
 * **✅ Yeni Yemek Tarifi Ekleme:** Basit ve kullanıcı dostu arayüzle hızla yeni yemek tariflerinizi oluşturun.
 * **🗑️ Yemek Tariflerini Silme:** İhtiyacınız olmayan ve artık yapmayı düşünmediğiniz, gereksiz yemek tariflerinizi, uygulamanızdan kolayca kaldırın.
